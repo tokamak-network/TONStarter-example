@@ -1,0 +1,20 @@
+{
+  "name": "tonstarter-project",
+  "version": "1.0.1",
+  "description": "🚀 Ready-to-run TONStarter example projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./commands/create-tonstarter-project.js"
+  },
+  "bin": {
+    "test-command": "node ./commands/create-tonstarter-project.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^6.9.0",
+    "inquirer": "^9.2.12",
+    "tonstarter-project": "^1.0.1"
+  },
+  "type": "module"
+}
