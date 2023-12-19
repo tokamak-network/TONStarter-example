@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tokamak-network/tokamak-layer2-sdk": "^0.0.4",
     "dotenv": "^16.3.1",
     "ethers": "^5.7.2",
     "inquirer": "^9.2.12",

@@ -7,5 +7,6 @@ test/node_modules
 .pnpm-store/
 .github/**/node_module
 
-#temp
+# local env files
 .env
+.env\*.local

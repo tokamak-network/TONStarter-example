@@ -1,9 +1,7 @@
 import ethers from "ethers";
 import fs from "fs";
 import dotenv from "dotenv";
-
-//initialize env values
-dotenv.config();
+dotenv.config({ path: "../../.env" });
 
 const MessageDirection = {
   L1_TO_L2: 0,
@@ -100,7 +98,7 @@ async function getSigners() {
   try {
     const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1Url);
     const l2RpcProvider = new ethers.providers.JsonRpcProvider(l2Url);
-    const privateKey = process.env.PRIVATE_KEY;
+    const privateKey = process.env.WALLET_PK;
     const l1Wallet = new ethers.Wallet(privateKey, l1RpcProvider);
     const l2Wallet = new ethers.Wallet(privateKey, l2RpcProvider);
 
