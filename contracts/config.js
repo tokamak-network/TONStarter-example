@@ -4,10 +4,10 @@ import { addressManager } from "./scripts/common_func.js";
 /**
  * @description this is default project value for scripts
  */
-const projectInfo = {
+let projectInfo = {
   projectId: ethers.constants.Zero,
-  tokenOwner: ourAddr,
-  projectOwner: ourAddr,
+  tokenOwner: null,
+  projectOwner: null,
   initialTotalSupply: ethers.utils.parseEther("100000"),
   tokenType: 0, // non-mintable
   projectName: "TokamakBakery",

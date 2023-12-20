@@ -6,28 +6,14 @@ import ERC20AJson from "../abis/ERC20A.json" assert { type: "json" };
 import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json" assert { type: "json" };
 import { setup } from "../setup/index.js";
 import { addressManager } from "./common_func.js";
+import { projectInfo } from "../config.js";
 
-let projectInfo;
+let projectInfo = projectInfo;
 
 async function main() {
   const GOERLI_CONTRACTS = lib.contracts.tonstarter.goerli;
   const TITAN_GOERLI_CONTRACTS = lib.contracts.tonstarter["titan-goerli"];
   const { l1Signer, ourAddr } = await setup();
-
-  projectInfo = {
-    projectId: ethers.constants.Zero,
-    tokenOwner: ourAddr,
-    projectOwner: ourAddr,
-    initialTotalSupply: ethers.utils.parseEther("100000"),
-    tokenType: 0, // non-mintable
-    projectName: "TokamakBakery",
-    tokenName: "TokamakBakery",
-    tokenSymbol: "TKB",
-    l1Token: ethers.constants.AddressZero,
-    l2Token: ethers.constants.AddressZero,
-    l2Type: 0,
-    addressManager: addressManager,
-  };
 
   const L1ProjectManager = new Contract(
     GOERLI_CONTRACTS.L1ProjectManagerProxy,

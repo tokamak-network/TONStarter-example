@@ -6,6 +6,7 @@ import ERC20AJson from "../abis/ERC20A.json" assert { type: "json" };
 import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json" assert { type: "json" };
 import L2ProjectManagerJson from "../abis/titan-goerli/L2ProjectManager.json" assert { type: "json" };
 import L2TokenFactoryJson from "../abis/titan-goerli/L2TokenFactory-old.json" assert { type: "json" };
+import L2StandardERC20 from "../abis/L2StandardERC20.json" assert { type: "json" };
 
 import { setup } from "../setup/index.js";
 import { addressManager } from "./common_func.js";
@@ -59,12 +60,7 @@ async function main() {
   console.log(projects);
   projectInfo.l1Token = projects.l1Token;
 
-  console.log("l2Token", l2Token);
-
-  if (
-    projects.l2Token == ethers.constants.Zero &&
-    l2Token == ethers.constants.Zero
-  ) {
+  if (l2Token == "0x0000000000000000000000000000000000000000") {
     /// L2 : create L2 token
     const topic = L2TokenFactory.interface.getEventTopic(
       "StandardL2TokenCreated"
@@ -83,28 +79,16 @@ async function main() {
     const log = receipt.logs.find((x) => x.topics.indexOf(topic) >= 0);
     const deployedEvent = L2TokenFactory.interface.parseLog(log);
 
-    l2Token = deployedEvent.args.l2Token;
-    console.log("StandardL2TokenCreated  L2Token", l2Token);
+    projectInfo.l2Token = deployedEvent.args.l2Token;
+    console.log("StandardL2TokenCreated  L2Token", projectInfo.l2Token);
 
-    projectInfo.l2Token = l2Token;
-
-    /// L1 : set L2 token
-    const topic1 = L1ProjectManager.interface.getEventTopic("SetL2Token");
-    const receipt1 = await (
-      await L1ProjectManager.setL2Token(
-        projectInfo.projectId,
-        projectInfo.l2Type,
-        projectInfo.addressManager,
-        projectInfo.l2Token
-      )
-    ).wait();
-    // console.log(receipt1.logs)
-    const log1 = receipt1.logs.find((x) => x.topics.indexOf(topic1) >= 0);
-    const deployedEvent1 = L1ProjectManager.interface.parseLog(log1);
-
-    console.log("SetL2Token L2Token", deployedEvent1.args.l2Token);
-    console.log("addressManager", deployedEvent1.args.addressManager);
-    return console.log("projectInfo : ", projectInfo);
+    let l2Token_CONTRACT = new ethers.Contract(
+      projectInfo.l2Token,
+      L2StandardERC20.abi,
+      l2Signer
+    );
+    let l1Token = await l2Token_CONTRACT.l1Token();
+    return console.log("l1Token in L2Token", l1Token);
   }
   console.log("Already set l2Token");
   return console.log("L2Token", l2Token);
