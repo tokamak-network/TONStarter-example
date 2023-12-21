@@ -8,8 +8,6 @@ import { setup } from "../setup/index.js";
 import { addressManager } from "./common_func.js";
 import { projectInfo } from "../config.js";
 
-let projectInfo = projectInfo;
-
 async function main() {
   const GOERLI_CONTRACTS = lib.contracts.tonstarter.goerli;
   const TITAN_GOERLI_CONTRACTS = lib.contracts.tonstarter["titan-goerli"];

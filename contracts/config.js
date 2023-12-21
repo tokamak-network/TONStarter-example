@@ -5,7 +5,7 @@ import { addressManager } from "./scripts/common_func.js";
  * @description this is default project value for scripts
  */
 let projectInfo = {
-  projectId: ethers.constants.Zero,
+  projectId: null,
   tokenOwner: null,
   projectOwner: null,
   initialTotalSupply: ethers.utils.parseEther("100000"),
