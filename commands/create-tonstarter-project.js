@@ -3,6 +3,9 @@ import inquirer from "inquirer";
 import ora from "ora";
 import dotenv from "dotenv";
 import createProjectL1 from "../contracts/deploy/0.create_project_L1.js";
+import setTokenOnL2 from "../contracts/deploy/1.set_token_L2.js";
+import welcomeMsg from "../contracts/utils/welcomeMsg.js";
+
 dotenv.config();
 
 const privateKey = process.env.WALLET_PK;
@@ -104,7 +107,9 @@ async function simulateAsyncOperation(asyncFunction) {
 }
 
 async function init() {
+  welcomeMsg();
   console.log("Starting to create a TONStarter project...");
+
   try {
     let answers = await inquirer.prompt(questions);
     if (!answers.adminAddress || process.env.WALLET_ADDRESS === undefined) {
@@ -127,10 +132,14 @@ async function init() {
     }
 
     answers = { ...answers, adminAddress: process.env.WALLET_ADDRESS };
-    const spinner = ora("Deploying a project on L1...").start();
-    const step1 = await createProjectL1(answers);
-    console.log("step1", step1);
-    spinner.stop();
+    const spinner0 = ora("Deploying a project on L1...").start();
+    const step0Result = await createProjectL1(answers);
+    spinner0.stop();
+    console.log("step0Result", step0Result);
+    const spinner1 = ora("Setting your token on L2...").start();
+    const step1Result = await setTokenOnL2(step0Result);
+    console.log("step1Result", step1Result);
+    spinner1.stop();
 
     // Continue with the logic based on the user's answers
     //createApp()

@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 
-export const getPublicSaleParams = (
+const getPublicSaleParams = (
   tier: Array<number>,
   percents: Array<number>,
   saleAmount: Array<number>,
@@ -62,7 +62,7 @@ export const getPublicSaleParams = (
   };
 };
 
-export const getInitialLiquidityParams = (
+const getInitialLiquidityParams = (
   totalAmount: BigNumber,
   tosPrice: number,
   tokenPrice: number,
@@ -80,7 +80,7 @@ export const getInitialLiquidityParams = (
   };
 };
 
-export const getLpRewardParams = (
+const getLpRewardParams = (
   claimer: string,
   token0: string,
   token1: string,
@@ -110,7 +110,7 @@ export const getLpRewardParams = (
   };
 };
 
-export const getTosAirdropParams = (
+const getTosAirdropParams = (
   claimer: string,
   totalAmount: number,
   totalClaimCount: number,
@@ -130,7 +130,7 @@ export const getTosAirdropParams = (
   };
 };
 
-export const getTonAirdropParams = (
+const getTonAirdropParams = (
   claimer: string,
   totalAmount: number,
   totalClaimCount: number,
@@ -150,7 +150,7 @@ export const getTonAirdropParams = (
   };
 };
 
-export const getScheduleParams = (
+const getScheduleParams = (
   name: string,
   claimer: string,
   totalAmount: BigNumber,
@@ -174,7 +174,7 @@ export const getScheduleParams = (
   };
 };
 
-export const getNonScheduleParams = (
+const getNonScheduleParams = (
   name: string,
   claimer: string,
   totalAmount: BigNumber
@@ -184,4 +184,14 @@ export const getNonScheduleParams = (
     claimer: claimer,
     totalAllocatedAmount: totalAmount,
   };
+};
+
+export default {
+  getPublicSaleParams,
+  getInitialLiquidityParams,
+  getLpRewardParams,
+  getTosAirdropParams,
+  getTonAirdropParams,
+  getScheduleParams,
+  getNonScheduleParams,
 };

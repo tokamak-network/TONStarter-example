@@ -6,6 +6,7 @@ import ERC20AJson from "../abis/ERC20A.json" assert { type: "json" };
 import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json" assert { type: "json" };
 import { setup } from "../setup/index.js";
 import { projectInfo as projectInfoTemp } from "../config.js";
+import { getBlockExplorerWithHash } from "../utils/blockExplorerMsg.js";
 
 // Answers: {
 //   projectName: 'd',
@@ -67,19 +68,26 @@ async function main(answers) {
     )
   ).wait();
 
+  console.log("\r");
+  console.log("Your project successfully deployed!!");
+  console.log(
+    "See your tx 👉",
+    getBlockExplorerWithHash("sepolia", receipt.transactionHash)
+  );
+
   const topic = L1ProjectManager.interface.getEventTopic("CreatedProject");
   const log = receipt.logs.find((x) => x.topics.indexOf(topic) >= 0);
   const deployedEvent = L1ProjectManager.interface.parseLog(log);
   projectInfo.projectId = deployedEvent.args.projectId;
   projectInfo.l1Token = deployedEvent.args.l1Token;
 
-  const tokenContract = new ethers.Contract(
-    projectInfo.l1Token,
-    ERC20AJson.abi,
-    l1Signer
-  );
-  const totalSupply = await tokenContract.totalSupply();
-  const balanceOf = await tokenContract.balanceOf(L1ProjectManager.address);
+  // const tokenContract = new ethers.Contract(
+  //   projectInfo.l1Token,
+  //   ERC20AJson.abi,
+  //   l1Signer
+  // );
+  // const totalSupply = await tokenContract.totalSupply();
+  // const balanceOf = await tokenContract.balanceOf(L1ProjectManager.address);
 
   return projectInfo;
 }

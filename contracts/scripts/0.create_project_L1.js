@@ -5,7 +5,6 @@ import lib from "titan.github.io";
 import ERC20AJson from "../abis/ERC20A.json" assert { type: "json" };
 import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json" assert { type: "json" };
 import { setup } from "../setup/index.js";
-import { addressManager } from "./common_func.js";
 import { projectInfo } from "../config.js";
 
 async function main() {
