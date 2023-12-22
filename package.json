@@ -7,18 +7,25 @@
     "test": "node ./commands/create-tonstarter-project.js"
   },
   "bin": {
-    "test-command": "node ./commands/create-tonstarter-project.js"
+    "create-tonstarter": "node ./commands/create-tonstarter-project.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@thanpolas/univ3prices": "^3.0.2",
     "@tokamak-network/tokamak-layer2-sdk": "^0.0.4",
     "dotenv": "^16.3.1",
     "ethers": "^5.7.2",
+    "font-proxima-nova": "^1.0.1",
+    "framer-motion": "^10.16.16",
     "inquirer": "^9.2.12",
     "ora": "^7.0.1",
-    "titan.github.io": "^1.0.5"
+    "titan.github.io": "^1.0.5",
+    "viem": "^1.20.3",
+    "wagmi": "^1.4.12"
   },
   "type": "module",
   "devDependencies": {

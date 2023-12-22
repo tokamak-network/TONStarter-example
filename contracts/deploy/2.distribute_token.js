@@ -1,7 +1,6 @@
 import { ethers, Contract, BigNumber } from "ethers";
 import lib from "titan.github.io";
 import { setup } from "../setup/index.js";
-import { projectInfo } from "../config.js";
 import univ3prices from "@thanpolas/univ3prices";
 
 //abis
@@ -15,33 +14,26 @@ import {
   getTonAirdropParams,
   getScheduleParams,
   getNonScheduleParams,
-} from "../utils/test.js";
+} from "../utils/getVaultsParams.js";
+import { getBlockExplorerWithHash } from "../utils/blockExplorerMsg.js";
 
 // Global variable because we need them almost everywhere
 
-const L2Token = "0x1fac3ff465d5d6a25bd6aa56b5b12bca6d3a6d01";
+const GOERLI_CONTRACTS = lib.contracts.tonstarter.goerli;
+const TITAN_GOERLI_CONTRACTS = lib.contracts.tonstarter;
+
 const L2TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC";
 const L2TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa";
 
-async function main() {
-  const GOERLI_CONTRACTS = lib.contracts.tonstarter.goerli;
-  const TITAN_GOERLI_CONTRACTS = lib.contracts.tonstarter["titan-goerli"];
+async function main(project) {
+  ["titan-goerli"];
   const { l1Signer, l2Signer, ourAddr } = await setup();
   const L1ProjectManager = new Contract(
     GOERLI_CONTRACTS.L1ProjectManagerProxy,
     L1ProjectManagerJson.abi,
     l1Signer
   );
-
-  projectInfo.projectId = await L1ProjectManager.projectCount();
-  let projects = await L1ProjectManager.projects(projectInfo.projectId);
-  projectInfo.tokenOwner = projects.tokenOwner;
-  projectInfo.projectOwner = projects.projectOwner;
-  projectInfo.addressManager = projects.addressManager;
-  projectInfo.l1Token = projects.l1Token;
-  projectInfo.l2Token = L2Token;
-
-  console.log("projectInfo", projectInfo);
+  const projectInfo = project;
 
   // test vaults :
   // initialLiquidityVault, tontosReward, prokectTokenTosReward, DAO,
@@ -183,16 +175,6 @@ async function main() {
   // console.log('customScheduleVaults' , customScheduleVaults)
   // console.log('rewardTonTosPoolParams' , rewardTonTosPoolParams)
   // console.log('rewardProjectTosPoolParams' , rewardProjectTosPoolParams)
-  const gos = await L1ProjectManager.estimateGas.launchProject(
-    projectInfo.projectId,
-    projectInfo.l2Token,
-    projectInfo.initialTotalSupply,
-    tokamakVaults,
-    customScheduleVaults,
-    customNonScheduleVaults
-  );
-  console.log("gos", gos);
-  //===
 
   const receipt = await (
     await L1ProjectManager.launchProject(
@@ -205,12 +187,17 @@ async function main() {
     )
   ).wait();
 
+  console.log("\r");
+  console.log("Your token successfully distributed on L1!!");
+  console.log(
+    "See your tx 👉",
+    getBlockExplorerWithHash("sepolia", receipt.transactionHash)
+  );
+
   //--------------------------
   const topic = L1ProjectManager.interface.getEventTopic("LaunchedProject");
   const log = receipt.logs.find((x) => x.topics.indexOf(topic) >= 0);
   const deployedEvent = L1ProjectManager.interface.parseLog(log);
-
-  console.log(deployedEvent.args);
 
   const tokenContract = new ethers.Contract(
     projectInfo.l1Token,
@@ -223,9 +210,12 @@ async function main() {
   console.log("l1Token L1ProjectManager balanceOf", balanceOf);
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+async function distributeToken(projectInfo) {
+  const result = main(projectInfo).catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+  return result;
+}
+
+export default distributeToken;

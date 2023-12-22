@@ -5,8 +5,9 @@ import dotenv from "dotenv";
 import createProjectL1 from "../contracts/deploy/0.create_project_L1.js";
 import setTokenOnL2 from "../contracts/deploy/1.set_token_L2.js";
 import welcomeMsg from "../contracts/utils/welcomeMsg.js";
+import distributeToken from "../contracts/deploy/2.distribute_token.js";
 
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
 const privateKey = process.env.WALLET_PK;
 const account = process.env.WALLET_ADDRESS;
@@ -135,11 +136,17 @@ async function init() {
     const spinner0 = ora("Deploying a project on L1...").start();
     const step0Result = await createProjectL1(answers);
     spinner0.stop();
-    console.log("step0Result", step0Result);
+    // console.log("step0Result", step0Result);
     const spinner1 = ora("Setting your token on L2...").start();
     const step1Result = await setTokenOnL2(step0Result);
-    console.log("step1Result", step1Result);
+    // console.log("step1Result", step1Result);
     spinner1.stop();
+    const spinner2 = ora(
+      "Distributing your token to each vault on L1..."
+    ).start();
+    const step2Result = await distributeToken(step1Result);
+    // console.log("step2Result", step2Result);
+    spinner2.stop();
 
     // Continue with the logic based on the user's answers
     //createApp()

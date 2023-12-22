@@ -1,7 +1,7 @@
 import ethers from "ethers";
 import fs from "fs";
 import dotenv from "dotenv";
-dotenv.config({ path: "../../.env" });
+dotenv.config();
 
 const MessageDirection = {
   L1_TO_L2: 0,
@@ -96,8 +96,10 @@ async function getL2Provider() {
 
 async function getSigners() {
   try {
-    const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1Url);
-    const l2RpcProvider = new ethers.providers.JsonRpcProvider(l2Url);
+    const l1EndPoint = process.env.RPC_SEPOLIA;
+    const l2EndPoint = process.env.RPC_TITAN_SEPOLIA;
+    const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1EndPoint);
+    const l2RpcProvider = new ethers.providers.JsonRpcProvider(l2EndPoint);
     const privateKey = process.env.WALLET_PK;
     const l1Wallet = new ethers.Wallet(privateKey, l1RpcProvider);
     const l2Wallet = new ethers.Wallet(privateKey, l2RpcProvider);

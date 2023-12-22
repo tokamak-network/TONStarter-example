@@ -1,4 +1,6 @@
 import { getSigners } from "../scripts/common_func.js";
+import dotenv from "dotenv";
+dotenv.config({ path: "../../.env" });
 
 async function setup() {
   try {
@@ -14,4 +16,6 @@ async function setup() {
   }
 }
 
-export { setup };
+function getContract() {}
+
+export { setup, getContract };
