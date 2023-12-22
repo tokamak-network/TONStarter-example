@@ -1,7 +1,7 @@
 import ethers from "ethers";
 import fs from "fs";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../../.env" });
 
 const MessageDirection = {
   L1_TO_L2: 0,

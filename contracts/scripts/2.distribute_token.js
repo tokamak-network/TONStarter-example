@@ -3,15 +3,7 @@ import lib from "titan.github.io";
 import { setup } from "../setup/index.js";
 import { projectInfo } from "../config.js";
 import univ3prices from "@thanpolas/univ3prices";
-import {
-  getPublicSaleParams,
-  getInitialLiquidityParams,
-  getLpRewardParams,
-  getTosAirdropParams,
-  getTonAirdropParams,
-  getScheduleParams,
-  getNonScheduleParams,
-} from "../utils/getVaultsParams.js";
+import { getInitialLiquidityParams } from "../utils/getVaultsParams.js";
 
 //abis
 import ERC20AJson from "../abis/ERC20A.json" assert { type: "json" };

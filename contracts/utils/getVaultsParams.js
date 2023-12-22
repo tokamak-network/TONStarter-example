@@ -168,13 +168,12 @@ var getNonScheduleParams = function (name, claimer, totalAmount) {
     totalAllocatedAmount: totalAmount,
   };
 };
-
-export default {
-  getPublicSaleParams,
-  getInitialLiquidityParams,
-  getLpRewardParams,
-  getTosAirdropParams,
-  getTonAirdropParams,
-  getScheduleParams,
-  getNonScheduleParams,
+exports.default = {
+  getPublicSaleParams: getPublicSaleParams,
+  getInitialLiquidityParams: getInitialLiquidityParams,
+  getLpRewardParams: getLpRewardParams,
+  getTosAirdropParams: getTosAirdropParams,
+  getTonAirdropParams: getTonAirdropParams,
+  getScheduleParams: getScheduleParams,
+  getNonScheduleParams: getNonScheduleParams,
 };
