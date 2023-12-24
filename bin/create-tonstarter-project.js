@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 import ethers from "ethers";
 import inquirer from "inquirer";
 import ora from "ora";
