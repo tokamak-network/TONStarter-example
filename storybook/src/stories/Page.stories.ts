@@ -2,11 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { within, userEvent, expect } from "@storybook/test";
 
 // import { Page } from "./Page";
-import Page from "../../../packages/template-simple/src/app/layout";
+// import RootLayout from "../../../packages/template-simple2/src/App";
+// import Page from "../../../packages/react-cra/ts/src/App";
+import RootLayout from "../../../packages/template-simple2/src/App";
 
 const meta = {
   title: "Example/Public Sale",
-  component: Page,
+  component: RootLayout,
   parameters: {
     // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
     layout: "fullscreen",

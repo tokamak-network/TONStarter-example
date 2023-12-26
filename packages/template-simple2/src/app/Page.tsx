@@ -4,12 +4,9 @@ import ProjectCard from "./ProjectCard";
 import TimelineComponent from "./TimelineComponent";
 import TokenEconomyComponent from "./TokenEconomyComponent";
 import ClaimScheduleChart from "./ClaimScheduleChart";
-// import TimelineComponent from "@/components/participate/TimelineComponent";
-// import TokenEconomyComponent from "@/components/participate/TokenEconomyComponent";
-// import ClaimScheduleChart from "@/components/participate/ClaimScheduleChart";
-// import TokenClaim from "@/components/participate/TokenClaim";
-// import TierContainer from "@/components/participate/TierContainer";
-// import Mockdata from "@/components/participate/MOCK_TABLE.json";
+import TokenClaim from "./TokenClaim";
+import TierContainer from "./TierContainer";
+import Mockdata from "./MOCK_TABLE.json";
 
 const saleInfo = {
   chainId: 1,
@@ -56,8 +53,7 @@ const isSocial = true;
 export default function Home() {
   return (
     <Flex
-      mt={"60px"}
-      mb={"121px"}
+      pb={"121px"}
       flexDir={"column"}
       color={"white"}
       alignItems={"center"}
@@ -124,13 +120,13 @@ export default function Home() {
         </Flex>
         <Flex flexDir={"column"}>
           <Flex>
-            {/* <TimelineComponent project={saleInfo} />
-            <TokenEconomyComponent project={saleInfo} /> */}
+            <TimelineComponent project={saleInfo} />
+            <TokenEconomyComponent project={saleInfo} />
           </Flex>
 
           <ClaimScheduleChart />
-          {/* <TokenClaim project={saleInfo} />
-          <TierContainer tierInfo={Mockdata.vaults[0].stosTier} /> */}
+          <TokenClaim project={saleInfo} />
+          <TierContainer tierInfo={Mockdata.vaults[0].stosTier} />
         </Flex>
       </Flex>
     </Flex>

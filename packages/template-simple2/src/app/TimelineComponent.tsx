@@ -1,7 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react";
 import "font-proxima-nova/style.css";
 import BlueTick from "../assets/icons/TickBlue.svg";
-import Image from "next/image";
 
 const Circle = (props: {
   status: string;
@@ -26,11 +25,7 @@ const Circle = (props: {
         alignItems={"center"}
         justifyContent={"center"}
       >
-        {status === "finished" ? (
-          <Image src={BlueTick} alt="BlueTick" />
-        ) : (
-          <Text>{index}</Text>
-        )}
+        {status === "finished" ? <BlueTick /> : <Text>{index}</Text>}
       </Flex>
     </Flex>
   );

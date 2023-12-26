@@ -1,5 +1,4 @@
 import { Box, Flex, Progress, Text, Link } from "@chakra-ui/react";
-import Image from "next/image";
 import DooropenLogo from "../assets/images/DOOROPEN.svg";
 import TOSLogo from "../assets/images/TOS.svg";
 import Web from "../assets/icons/ParticipateWeb.svg";
@@ -13,9 +12,6 @@ const removeHTMLTags = (str: string) => {
   else str = str.toString();
 
   return str.replace(/(<([^>]+)>)/gi, "");
-};
-const myLoader = ({ src }: any) => {
-  return `${src}`;
 };
 
 const ImageContainer = (props: { imageSrc: string }) => {
@@ -67,7 +63,7 @@ const ImageContainer = (props: { imageSrc: string }) => {
           </Text>
         </Flex>
       </Flex>
-      <Image src={DooropenLogo} alt="imageSrc" />
+      <img src={DooropenLogo} alt="imageSrc" />
     </Flex>
   );
 };
@@ -83,7 +79,6 @@ const DescriptionContainer = (props: { project: any; isSocial: boolean }) => {
     { name: "Discord", image: Discord, link: project.discord },
   ];
   const progress = 80;
-
   return (
     <Flex flexDir={"column"} lineHeight={"normal"}>
       <Text fontSize={"24px"} fontWeight={700}>
@@ -199,7 +194,7 @@ const DescriptionContainer = (props: { project: any; isSocial: boolean }) => {
                         _hover={{ textDecor: "none" }}
                         textDecor={"none"}
                       >
-                        <Image src={social.image} alt="socialIcon" />
+                        <img src={social.image} alt="socialIcon" />
                         <Text
                           ml={"6px"}
                           color={"#D0D0DA"}
@@ -304,7 +299,7 @@ const DescriptionContainer = (props: { project: any; isSocial: boolean }) => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            <Image src={TOSLogo} alt="tosLogo" />
+            <img src={TOSLogo} alt="tosLogo" />
           </Flex>
           <Flex
             borderRadius={"50%"}
@@ -314,9 +309,8 @@ const DescriptionContainer = (props: { project: any; isSocial: boolean }) => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            <Image
+            <img
               style={{ objectFit: "initial", borderRadius: "50%" }}
-              loader={myLoader}
               src={project.tokenSymbolImage}
               alt="tosLogo"
               width={28}
@@ -330,8 +324,6 @@ const DescriptionContainer = (props: { project: any; isSocial: boolean }) => {
 };
 
 function ProjectCard(props: { project: any; isSocial: boolean }) {
-  const { project } = props;
-
   return (
     <Flex w={"100%"} columnGap={"45px"} alignItems={"center"}>
       <Flex>
