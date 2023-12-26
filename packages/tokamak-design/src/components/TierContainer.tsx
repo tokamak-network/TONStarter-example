@@ -104,7 +104,6 @@ const TierContainer = (props: { tierInfo: any }) => {
       ],
     },
   ];
-  console.log("tiers", tiers);
 
   return (
     <Flex mt={"90px"} flexDir={"column"}>
@@ -112,7 +111,8 @@ const TierContainer = (props: { tierInfo: any }) => {
         color={"#fff"}
         fontSize={"24px"}
         fontWeight={700}
-        lineHeight={"21px"}>
+        lineHeight={"21px"}
+      >
         Tier Details
         <span
           style={{
@@ -120,7 +120,8 @@ const TierContainer = (props: { tierInfo: any }) => {
             color: "#9D9EA5",
             fontSize: "16px",
             fontWeight: 400,
-          }}>
+          }}
+        >
           Snapshot date 2021.10.25 16:59 (UTC+9)
         </span>
       </Text>
@@ -132,27 +133,32 @@ const TierContainer = (props: { tierInfo: any }) => {
               w="276px"
               borderRadius={"10px"}
               border={"1px solid #373737"}
-              flexDir={"column"}>
+              flexDir={"column"}
+            >
               <Flex
                 borderBottom={"1px solid #373737"}
                 height={"60px"}
                 justifyContent={"center"}
-                alignItems={"center"}>
+                alignItems={"center"}
+              >
                 <Text fontWeight={700} color={"#fff"} fontSize={"15px"}>
                   {tier.title}
                 </Text>
               </Flex>
               {tier.data.map((tierData: any, index: number) => {
                 console.log();
-                
+
                 return (
                   <Flex
-                  px={'21px'}
+                    px={"21px"}
                     key={index}
-                    borderBottom={index !== tier.data.length-1? "1px solid #373737":''}
+                    borderBottom={
+                      index !== tier.data.length - 1 ? "1px solid #373737" : ""
+                    }
                     height={"60px"}
                     justifyContent={"space-between"}
-                    alignItems={"center"}>
+                    alignItems={"center"}
+                  >
                     <Text fontWeight={700} color={"#9D9EA5"} fontSize={"15px"}>
                       {tierData.key}
                     </Text>

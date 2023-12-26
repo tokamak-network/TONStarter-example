@@ -50,7 +50,7 @@ const saleInfo = {
 
 const isSocial = true;
 
-export default function Home() {
+export default function Page() {
   return (
     <Flex
       pb={"121px"}

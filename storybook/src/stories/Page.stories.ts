@@ -1,25 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { within, userEvent, expect } from "@storybook/test";
-
-// import { Page } from "./Page";
-// import RootLayout from "../../../packages/template-simple2/src/App";
-// import Page from "../../../packages/react-cra/ts/src/App";
-import RootLayout from "../../../packages/template-simple2/src/App";
+// import { within, userEvent, expect } from "@storybook/test";
+import Template from "../../../packages/tokamak-design/src/App";
 
 const meta = {
   title: "Example/Public Sale",
-  component: RootLayout,
+  component: Template,
   parameters: {
     // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
     layout: "fullscreen",
   },
-};
-// satisfies Meta<typeof Page>;
+} satisfies Meta<typeof Template>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LoggedOut: Story = {};
+export const TokamakDesign: Story = {
+  args: {
+    publicValutAddress: "0x",
+  },
+};
+export const Simple: Story = {};
+export const EalryTonstarter: Story = {};
 
 // More on interaction testing: https://storybook.js.org/docs/writing-tests/interaction-testing
 // export const LoggedIn: Story = {

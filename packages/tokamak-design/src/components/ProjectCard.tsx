@@ -63,7 +63,7 @@ const ImageContainer = (props: { imageSrc: string }) => {
           </Text>
         </Flex>
       </Flex>
-      <img src={DooropenLogo} alt="imageSrc" />
+      {/* <DooropenLogo /> */}
     </Flex>
   );
 };
@@ -299,7 +299,7 @@ const DescriptionContainer = (props: { project: any; isSocial: boolean }) => {
             justifyContent={"center"}
             alignItems={"center"}
           >
-            <img src={TOSLogo} alt="tosLogo" />
+            {/* <TOSLogo /> */}
           </Flex>
           <Flex
             borderRadius={"50%"}
