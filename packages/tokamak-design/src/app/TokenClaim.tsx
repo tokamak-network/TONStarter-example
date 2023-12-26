@@ -5,7 +5,6 @@ import "react-circular-progressbar/dist/styles.css";
 
 const TokenClaim = (props: { project: any }) => {
   const { project } = props;
-  console.log("project", project);
   const progress = 33;
   return (
     <Flex mt={"90px"} flexDir={"column"}>
