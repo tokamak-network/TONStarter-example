@@ -1,7 +1,6 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { useState } from "react";
-import ClaimChart from "./ClaimChart";
 import ClaimTable from "./ClaimTable";
 
 const ClaimScheduleChart = () => {

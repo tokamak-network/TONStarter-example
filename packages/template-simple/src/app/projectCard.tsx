@@ -1,14 +1,13 @@
 import { Box, Flex, Progress, Text, Link } from "@chakra-ui/react";
 import Image from "next/image";
+//@ts-ignore
 import DooropenLogo from "@/assets/images/DOOROPEN.svg";
 import TOSLogo from "@/assets/images/TOS.svg";
-import { useRouter } from "next/navigation";
 import Web from "@/assets/icons/ParticipateWeb.svg";
 import Telegram from "@/assets/icons/ParticipateTelegram.svg";
 import Medium from "@/assets/icons/ParticipateMedium.svg";
 import Twitter from "@/assets/icons/ParticipateTwitter.svg";
 import Discord from "@/assets/icons/ParticipateDiscord.svg";
-import EditIcon from "@/assets/icons/EditWheel.svg";
 
 const removeHTMLTags = (str: string) => {
   if (str === null || str === "") return false;
