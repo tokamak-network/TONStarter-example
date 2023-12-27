@@ -7,8 +7,9 @@ import ClaimScheduleChart from "./ClaimScheduleChart";
 import TokenClaim from "./TokenClaim";
 import TierContainer from "./TierContainer";
 import Mockdata from "./MOCK_TABLE.json";
+import { TokamakDesignProps } from "@/App";
 
-const saleInfo = {
+const mockData = {
   chainId: 1,
   name: "Dragons of Midgard",
   description:
@@ -50,7 +51,12 @@ const saleInfo = {
 
 const isSocial = true;
 
-export default function Page() {
+export default function Page(props: TokamakDesignProps) {
+  const saleInfo = {
+    ...mockData,
+    name: props?.title ?? mockData.name,
+    description: props?.description ?? mockData.description,
+  };
   return (
     <Flex
       pb={"121px"}
