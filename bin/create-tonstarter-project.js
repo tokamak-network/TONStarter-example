@@ -166,7 +166,7 @@ async function init() {
       400
     );
     const distributedTokens = await animateEllipsis(
-      "Deploying a project on L1...",
+      "Distributing tokens to each vault on L1...",
       () => distributeToken(setTokens),
       400
     );

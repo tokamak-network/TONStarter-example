@@ -158,19 +158,23 @@ async function init() {
       () => createProjectL1(answers),
       400
     );
+
+    // await new Promise((resolve) => setTimeout(resolve, 10000));
+
     const setTokens = await animateEllipsis(
       "Setting your token on L2...",
       () => setTokenOnL2(deployedProject),
       400
     );
+
     const distributedTokens = await animateEllipsis(
-      "Deploying a project on L1...",
+      "Distributing tokens to each vault on L1...",
       () => distributeToken(setTokens),
       400
     );
 
     console.log(
-      "All process is done. You just need to wait for relaying your tokens"
+      "🚀All process is done. You just need to wait for relaying your tokens."
     );
 
     // const spinner1 = ora("Setting your token on L2...").start();

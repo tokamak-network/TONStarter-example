@@ -9,8 +9,17 @@ function getPublicSaleParams(
   changeTOSPercent,
   times,
   claimCounts,
-  claimTimes,
-  claimPercents
+  firstClaimPercent,
+  firstClaimTime,
+  secondClaimTime,
+  roundInterval,
+  receiveAddress,
+  vestingClaimCounts,
+  vestingfirstClaimPercent,
+  vestingClaimTime1,
+  vestingClaimTime2,
+  vestingRoundInterval,
+  fee
 ) {
   let InitalParameterPublicSaleVault = {
     stosTier1: ethers.BigNumber.from("" + tier[0]),
@@ -21,8 +30,8 @@ function getPublicSaleParams(
     tier2Percents: ethers.BigNumber.from("" + percents[1]),
     tier3Percents: ethers.BigNumber.from("" + percents[2]),
     tier4Percents: ethers.BigNumber.from("" + percents[3]),
-    total1roundSaleAmount: ethers.BigNumber.from("" + saleAmount[0]),
-    total2roundSaleAmount: ethers.BigNumber.from("" + saleAmount[1]),
+    total1roundSaleAmount: saleAmount[0],
+    total2roundSaleAmount: saleAmount[1],
     saleTokenPrice: ethers.BigNumber.from("" + price[0]),
     payTokenPrice: ethers.BigNumber.from("" + price[1]),
     hardcapAmount: ethers.BigNumber.from("" + hardcapAmount),
@@ -34,26 +43,29 @@ function getPublicSaleParams(
     snapshotTime: ethers.BigNumber.from("" + times[4]),
     start2roundTime: ethers.BigNumber.from("" + times[5]),
     end2roundTime: ethers.BigNumber.from("" + times[6]),
-    claimCounts: ethers.BigNumber.from("" + claimCounts),
   };
 
   let InitalParameterPublicSaleClaim = {
-    claimTimes: [],
-    claimPercents: [],
+    claimCounts: ethers.BigNumber.from("" + claimCounts),
+    firstClaimPercent: ethers.BigNumber.from("" + firstClaimPercent),
+    firstClaimTime: ethers.BigNumber.from("" + firstClaimTime),
+    secondClaimTime: ethers.BigNumber.from("" + secondClaimTime),
+    roundInterval: ethers.BigNumber.from("" + roundInterval),
   };
-
-  for (let i = 0; i < claimCounts; i++) {
-    InitalParameterPublicSaleClaim.claimTimes.push(
-      ethers.BigNumber.from("" + claimTimes[i])
-    );
-    InitalParameterPublicSaleClaim.claimPercents.push(
-      ethers.BigNumber.from("" + claimPercents[i])
-    );
-  }
+  let InitialParameterVestingClaim = {
+    receiveAddress: receiveAddress,
+    totalClaimCount: ethers.BigNumber.from("" + vestingClaimCounts),
+    firstClaimPercent: ethers.BigNumber.from("" + vestingfirstClaimPercent),
+    firstClaimTime: ethers.BigNumber.from("" + vestingClaimTime1),
+    secondClaimTime: ethers.BigNumber.from("" + vestingClaimTime2),
+    roundIntervalTime: ethers.BigNumber.from("" + vestingRoundInterval),
+    fee: fee,
+  };
 
   return {
     vaultParams: InitalParameterPublicSaleVault,
     claimParams: InitalParameterPublicSaleClaim,
+    vestingParams: InitialParameterVestingClaim,
   };
 }
 

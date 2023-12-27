@@ -66,6 +66,8 @@ async function main() {
       "StandardL2TokenCreated"
     );
 
+    console.log("projectInfo", projectInfo);
+
     const receipt = await (
       await L2TokenFactory.createL2Token(
         projectInfo.projectOwner,
