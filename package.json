@@ -1,6 +1,6 @@
 {
   "name": "tonstarter-sdk",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "TONStarter sdk",
   "scripts": {
     "test": "node ./commands/create-tonstarter-project.js"

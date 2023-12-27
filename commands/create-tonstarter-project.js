@@ -177,17 +177,6 @@ async function init() {
       "🚀All process is done. You just need to wait for relaying your tokens."
     );
 
-    // const spinner1 = ora("Setting your token on L2...").start();
-    // const step1Result = await setTokenOnL2(step0Result);
-    // // console.log("step1Result", step1Result);
-    // spinner1.stop();
-    // const spinner2 = ora(
-    //   "Distributing your token to each vault on L1..."
-    // ).start();
-    // const step2Result = await distributeToken(step1Result);
-    // // console.log("step2Result", step2Result);
-    // spinner2.stop();
-
     // Continue with the logic based on the user's answers
     //createApp()
     //Run()

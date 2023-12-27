@@ -191,12 +191,12 @@ async function main(project) {
   );
 
   let tokamakVaults = {
-    publicSaleParams: publicSaleParams,
-    initialVaultParams: initialVaultParams,
-    rewardTonTosPoolParams: rewardTonTosPoolParams,
-    rewardProjectTosPoolParams: rewardProjectTosPoolParams,
-    tosAirdropParams: tosAirdropParams,
-    tonAirdropParams: tonAirdropParams,
+    publicSaleParams,
+    initialVaultParams,
+    rewardTonTosPoolParams,
+    rewardProjectTosPoolParams,
+    tosAirdropParams,
+    tonAirdropParams,
   };
   // console.log('tokamakVaults' ,tokamakVaults )
   let customScheduleVaults = [teamParams, marketingParams];
@@ -220,20 +220,8 @@ async function main(project) {
     getBlockExplorerWithHash("sepolia", receipt.transactionHash)
   );
 
-  //--------------------------
   const topic = L1ProjectManager.interface.getEventTopic("LaunchedProject");
   const log = receipt.logs.find((x) => x.topics.indexOf(topic) >= 0);
-  // const deployedEvent = L1ProjectManager.interface.parseLog(log);
-
-  // const tokenContract = new ethers.Contract(
-  //   projectInfo.l1Token,
-  //   ERC20AJson.abi,
-  //   l1Signer
-  // );
-  // let totalSupply = await tokenContract.totalSupply();
-  // let balanceOf = await tokenContract.balanceOf(L1ProjectManager.address);
-  // console.log("l1Token totalSupply", totalSupply);
-  // console.log("l1Token L1ProjectManager balanceOf", balanceOf);
 }
 
 async function distributeToken(projectInfo) {
@@ -243,19 +231,5 @@ async function distributeToken(projectInfo) {
   });
   return result;
 }
-// const testData = {
-//   projectId: "06",
-//   tokenOwner: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-//   projectOwner: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-//   initialTotalSupply: "100",
-//   tokenType: 0,
-//   projectName: "test",
-//   tokenName: "test",
-//   tokenSymbol: "test",
-//   l1Token: "0x4cB14C88233346c32e922d6F791c96eDBfbE74FA",
-//   l2Token: "0x0000000000000000000000000000000000000000",
-//   l2Type: 0,
-//   addressManager: "0xEFa07e4263D511fC3a7476772e2392efFb1BDb92",
-// };
-// distributeToken(testData);
+
 export default distributeToken;
