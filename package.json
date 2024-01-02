@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fontsource/roboto-mono": "^5.0.16",
     "@thanpolas/univ3prices": "^3.0.2",
     "@tokamak-network/tokamak-layer2-sdk": "^0.0.4",
     "dotenv": "^16.3.1",
@@ -21,8 +22,8 @@
   },
   "type": "module",
   "devDependencies": {
+    "eslint": "^8",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3",
-    "eslint": "^8"
+    "typescript": "^5.3.3"
   }
 }

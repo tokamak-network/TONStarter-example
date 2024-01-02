@@ -174,7 +174,7 @@ async function init() {
     );
 
     console.log(
-      "🚀All process is done. You just need to wait for relaying your tokens."
+      "🚀All process is done. You just need to wait for depositing your tokens."
     );
 
     // Continue with the logic based on the user's answers

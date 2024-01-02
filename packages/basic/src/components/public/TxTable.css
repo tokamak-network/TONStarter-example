@@ -1,0 +1,41 @@
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.column-tx {
+  width: 100px; /* Adjust the width as needed */
+}
+.column-block {
+  width: 80px; /* Adjust the width as needed */
+}
+.column-account {
+  width: 135px; /* Adjust the width as needed */
+}
+.column-type {
+  width: 110px; /* Adjust the width as needed */
+}
+.column-amount {
+  width: 110px; /* Adjust the width as needed */
+}
+.column-date {
+  width: 140px; /* Adjust the width as needed */
+}
+.custom-table tr {
+  border-bottom: 1px solid #f1f5f9;
+}
+.custom-table th,
+.custom-table td {
+  padding: 14px;
+  text-align: center;
+}
+.custom-table th {
+  font-weight: bold;
+}
+
+button {
+  border-width: 0;
+  background: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 24;
+}
