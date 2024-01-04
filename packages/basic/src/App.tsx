@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Overview from "./components/Overview";
 import Participate from "./components/Participate";
 import Transactions from "./components/Transactions";
+import Vaults from "./components/Vaults";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Header />
       <Overview />
       <Participate />
+      <Vaults />
       <Transactions />
     </div>
   );
