@@ -3,7 +3,7 @@
   "version": "1.0.4",
   "description": "TONStarter sdk",
   "scripts": {
-    "test": "node ./commands/create-tonstarter-project.js"
+    "create-tonstarter": "node ./commands/create-tonstarter-project.js"
   },
   "bin": {
     "create-tonstarter": "./bin/create-tonstarter-project.js"
@@ -18,7 +18,7 @@
     "ethers": "^5.7.2",
     "inquirer": "^9.2.12",
     "ora": "^7.0.1",
-    "titan.github.io": "^1.0.5"
+    "titan.github.io": "^1.0.9"
   },
   "type": "module",
   "devDependencies": {
