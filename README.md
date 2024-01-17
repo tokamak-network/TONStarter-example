@@ -17,13 +17,13 @@ cd TONStarter-sdk
 3. Create a environment file(.env) following the .env.sample.
 
 ```
-RPC_ETHEREUM=
-RPC_SEPOLIA=
+RPC_ETHEREUM=$$$$
+RPC_SEPOLIA=$$$$
 RPC_TITAN=https://rpc.titan.tokamak.network
 RPC_TITAN_SEPOLIA=https://rpc.titan-goerli.tokamak.network
 TITAN_BLOCKEXPLORER=https://explorer.titan.tokamak.network
-WALLET_ADDRESS=
-WALLET_PK=
+WALLET_ADDRESS=$$$$
+WALLET_PK=$$$$
 ```
 
 4. Install the required dependencies
