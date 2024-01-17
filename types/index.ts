@@ -1,3 +1,2 @@
-import { ProjectInfo } from "./vaults";
-
-export type Project = ProjectInfo;
+export * from "./vaults";
+export * from "./command";

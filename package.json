@@ -17,11 +17,14 @@
     "dotenv": "^16.3.1",
     "ethers": "^5.7.2",
     "inquirer": "^9.2.12",
+    "inquirer-date-prompt": "^3.0.0",
+    "inquirer-table-input": "^0.0.3",
     "ora": "^7.0.1",
     "titan.github.io": "^1.0.9"
   },
   "type": "module",
   "devDependencies": {
+    "@types/inquirer": "^9.0.7",
     "eslint": "^8",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
