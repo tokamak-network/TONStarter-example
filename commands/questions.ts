@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import chalk from "chalk";
 import { CLI_Answer } from "../types";
+import { ethers } from "ethers";
+import commafy from "../utils/commafy";
 
 dotenv.config({ path: "../.env" });
 
@@ -17,16 +19,22 @@ function validateNumberValue(value: any) {
 }
 
 export const firstQuestions = [
-  {
-    type: "input",
-    name: "projectName",
-    message: "Enter your project name:",
-  },
-  {
-    type: "input",
-    name: "tokenName",
-    message: "Enter your token name:",
-  },
+  // {
+  //   type: "confirm",
+  //   name: "adminAddress",
+  //   message: `Are you certain about using this account as the project owner? (${account})`,
+  //   validate: (value: string) => ethers.utils.isAddress(value),
+  // },
+  // {
+  //   type: "input",
+  //   name: "projectName",
+  //   message: "Enter your project name:",
+  // },
+  // {
+  //   type: "input",
+  //   name: "tokenName",
+  //   message: "Enter your token name:",
+  // },
   {
     type: "input",
     name: "tokenSymbol",
@@ -36,33 +44,37 @@ export const firstQuestions = [
     type: "input",
     name: "initialTotalSupply",
     message: "Enter initial total supply of your token:",
-    validate: (value: any) => validateNumberValue(value),
+    validate: (value: string) => validateNumberValue(value),
   },
   {
-    type: "confirm",
-    name: "adminAddress",
-    message: `Are you certain about using this account as the project owner? (${account})`,
+    type: "input",
+    name: "tokenAllocation",
+    message: (answers: CLI_Answer) =>
+      `How many token do you want to allocate for this IDO (You are planning to mint ${chalk.greenBright(
+        commafy(answers.initialTotalSupply)
+      )} ${chalk.greenBright(answers.tokenSymbol)}) :`,
+    validate: (value: string) => validateNumberValue(value),
   },
-  {
-    type: "date",
-    name: "round1Start",
-    message: "When do you like to start Round 1 (for STOS holders)?",
-  },
-  {
-    type: "date",
-    name: "round1End",
-    message: "When do you like to end Round 1 (for STOS holders)?",
-  },
-  {
-    type: "date",
-    name: "round2Start",
-    message: "When do you like to start Round 2 (for anyone)?",
-  },
-  {
-    type: "date",
-    name: "round2End",
-    message: "When do you like to end Round 1 (for STOS holders)?",
-  },
+  // {
+  //   type: "date",
+  //   name: "round1Start",
+  //   message: "When do you like to start Round 1 (for STOS holders)?",
+  // },
+  // {
+  //   type: "date",
+  //   name: "round1End",
+  //   message: "When do you like to end Round 1 (for STOS holders)?",
+  // },
+  // {
+  //   type: "date",
+  //   name: "round2Start",
+  //   message: "When do you like to start Round 2 (for anyone)?",
+  // },
+  // {
+  //   type: "date",
+  //   name: "round2End",
+  //   message: "When do you like to end Round 1 (for STOS holders)?",
+  // },
 ];
 
 export const getSecondQuestions = (answer: CLI_Answer) => {
@@ -81,30 +93,82 @@ export const getSecondQuestions = (answer: CLI_Answer) => {
       editableColor: chalk.bgYellow.bold,
       editingColor: chalk.bgGreen.bold,
       columns: [
-        { name: chalk.cyan.bold("NF Number"), value: "nf" },
-        { name: chalk.cyan.bold("Customer"), value: "customer" },
-        { name: chalk.cyan.bold("City"), value: "city", editable: "text" },
+        { name: chalk.cyan.bold("Round"), value: "nf" },
+        { name: chalk.cyan.bold("Public Sale"), value: "nf" },
+        { name: chalk.cyan.bold("Initial Liquidity"), value: "customer" },
         {
-          name: chalk.cyan.bold("Quantity"),
+          name: chalk.cyan.bold(`${answer.tokenSymbol}-TOS`),
+          value: "city",
+          editable: "text",
+        },
+        {
+          name: chalk.cyan.bold("TON-TOS"),
           value: "quantity",
           editable: "text",
         },
         {
-          name: chalk.cyan.bold("Pricing"),
+          name: chalk.cyan.bold("TON Staker"),
+          value: "pricing",
+          editable: "text",
+        },
+        {
+          name: chalk.cyan.bold("TOS Staker"),
           value: "pricing",
           editable: "text",
         },
       ],
       rows: [
         [
-          chalk.bold("8288"),
+          chalk.bold("1"),
           "Shinji Masumoto",
           "2024.02.01 17:00",
           `${answer.projectName}`,
           `${answer.projectName}`,
         ],
         [
-          chalk.bold("8289"),
+          chalk.bold("2"),
+          "Arnold Mcfee",
+          "New York",
+          `${answer.projectName}`,
+          `${answer.projectName}`,
+        ],
+        [
+          chalk.bold("2"),
+          "Arnold Mcfee",
+          "New York",
+          `${answer.projectName}`,
+          `${answer.projectName}`,
+        ],
+        [
+          chalk.bold("2"),
+          "Arnold Mcfee",
+          "New York",
+          `${answer.projectName}`,
+          `${answer.projectName}`,
+        ],
+        [
+          chalk.bold("2"),
+          "Arnold Mcfee",
+          "New York",
+          `${answer.projectName}`,
+          `${answer.projectName}`,
+        ],
+        [
+          chalk.bold("2"),
+          "Arnold Mcfee",
+          "New York",
+          `${answer.projectName}`,
+          `${answer.projectName}`,
+        ],
+        [
+          chalk.bold("2"),
+          "Arnold Mcfee",
+          "New York",
+          `${answer.projectName}`,
+          `${answer.projectName}`,
+        ],
+        [
+          chalk.bold("2"),
           "Arnold Mcfee",
           "New York",
           `${answer.projectName}`,

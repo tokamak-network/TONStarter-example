@@ -10,4 +10,5 @@ export type CLI_Answer = {
   round1End: Date;
   round2Start: Date;
   round2End: Date;
+  tokenAllocation: string;
 };
