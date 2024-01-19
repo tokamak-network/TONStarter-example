@@ -1,3 +1,19 @@
+export type VaultTypesOnI =
+  | "Public"
+  | "Liquidity"
+  | "Ecosystem"
+  | "Team"
+  | "TONStarter";
+
+export type EssentialVault =
+  | "PublicSale"
+  | "InitialLiquidity"
+  | "ProjectTosLP"
+  | "TonTosLP"
+  | "TonStaker"
+  | "TosStaker"
+  | "Vesting";
+
 type ClaimSchedule = {
   claimRound: number;
   claimTime: number;

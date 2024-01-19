@@ -3,7 +3,7 @@
   "version": "1.0.4",
   "description": "TONStarter sdk",
   "scripts": {
-    "create-tonstarter": "node ./commands/create-tonstarter-project.js"
+    "create-tonstarter": "tsx ./commands/create-tonstarter-project.ts"
   },
   "bin": {
     "create-tonstarter": "./bin/create-tonstarter-project.js"

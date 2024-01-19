@@ -12,13 +12,7 @@ import DatePrompt from "inquirer-date-prompt";
 //@ts-ignore
 import welcomeMsg from "../contracts/utils/welcomeMsg.js";
 import { CLI_Answer, DeployContractStep } from "../types/command.js";
-import {
-  firstQuestions,
-  getSecondQuestions,
-  questions,
-  questions2,
-  secondQuestions,
-} from "./questions";
+import { firstQuestions, getSecondQuestions } from "./questions";
 // import distributeToken from "../contracts/deploy/2.distribute_token.js";
 
 dotenv.config({ path: "../.env" });

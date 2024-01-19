@@ -1,8 +1,9 @@
 import dotenv from "dotenv";
 import chalk from "chalk";
-import { CLI_Answer } from "../types";
+import { CLI_Answer, VaultTypesOnI } from "../types";
 import { ethers } from "ethers";
 import commafy from "../utils/commafy";
+import { distributeToken } from "../utils/distributeToken";
 
 dotenv.config({ path: "../.env" });
 
@@ -35,56 +36,107 @@ export const firstQuestions = [
   //   name: "tokenName",
   //   message: "Enter your token name:",
   // },
+  // {
+  //   type: "input",
+  //   name: "tokenSymbol",
+  //   message: "Enter your token symbol:",
+  // },
+  // {
+  //   type: "input",
+  //   name: "initialTotalSupply",
+  //   message: "Enter initial total supply of your token:",
+  //   validate: (value: string) => validateNumberValue(value),
+  // },
+  // {
+  //   type: "input",
+  //   name: "tokenAllocation",
+  //   message: (answers: CLI_Answer) =>
+  //     `How many token do you want to allocate for this IDO (You are planning to mint ${chalk.greenBright(
+  //       commafy(answers.initialTotalSupply)
+  //     )} ${chalk.greenBright(answers.tokenSymbol)}) :`,
+  //   validate: (value: string) => validateNumberValue(value),
+  // },
   {
-    type: "input",
-    name: "tokenSymbol",
-    message: "Enter your token symbol:",
+    type: "date",
+    name: "round1Start",
+    message: "When do you like to start Round 1 (for STOS holders)?",
   },
   {
-    type: "input",
-    name: "initialTotalSupply",
-    message: "Enter initial total supply of your token:",
-    validate: (value: string) => validateNumberValue(value),
+    type: "date",
+    name: "round1End",
+    message: "When do you like to end Round 1 (for STOS holders)?",
+    validate: (endDate: any, answers: any) => {
+      console.log(endDate, answers);
+    },
   },
   {
-    type: "input",
-    name: "tokenAllocation",
-    message: (answers: CLI_Answer) =>
-      `How many token do you want to allocate for this IDO (You are planning to mint ${chalk.greenBright(
-        commafy(answers.initialTotalSupply)
-      )} ${chalk.greenBright(answers.tokenSymbol)}) :`,
-    validate: (value: string) => validateNumberValue(value),
+    type: "date",
+    name: "round2Start",
+    message: "When do you like to start Round 2 (for anyone)?",
   },
-  // {
-  //   type: "date",
-  //   name: "round1Start",
-  //   message: "When do you like to start Round 1 (for STOS holders)?",
-  // },
-  // {
-  //   type: "date",
-  //   name: "round1End",
-  //   message: "When do you like to end Round 1 (for STOS holders)?",
-  // },
-  // {
-  //   type: "date",
-  //   name: "round2Start",
-  //   message: "When do you like to start Round 2 (for anyone)?",
-  // },
-  // {
-  //   type: "date",
-  //   name: "round2End",
-  //   message: "When do you like to end Round 1 (for STOS holders)?",
-  // },
+  {
+    type: "date",
+    name: "round2End",
+    message: "When do you like to end Round 1 (for STOS holders)?",
+  },
 ];
 
 export const getSecondQuestions = (answer: CLI_Answer) => {
-  const propotions = "";
+  const { distributedAmounts, recalculatedPercentage } = distributeToken(
+    Number(answer.tokenAllocation)
+  );
+  const getName = (title: VaultTypesOnI, percentage: number) => {
+    // return `${chalk.cyan.bold(title)} (${percentage}%)`;
+    return `${chalk.cyan.bold(title)}`;
+  };
+
+  const generateColumns = () => [
+    {
+      name: chalk.cyan.bold("   "),
+    },
+    {
+      name: getName("Public", recalculatedPercentage.Public),
+      value: "tokenAllocation_Public",
+      editable: "number",
+    },
+    {
+      name: getName("Liquidity", recalculatedPercentage.Liquidity),
+      value: "tokenAllocation_InitialLiquidity",
+      editable: "number",
+    },
+    {
+      name: getName("Ecosystem", recalculatedPercentage.Ecosystem),
+      value: "tokenAllocation_ProjectTos",
+      editable: "number",
+    },
+    {
+      name: getName("Team", recalculatedPercentage.Team),
+      value: "tokenAllocation_TonTos",
+      editable: "number",
+    },
+    {
+      name: getName("TONStarter", recalculatedPercentage.TONStarter),
+      value: "pricing",
+      editable: "number",
+    },
+  ];
+
   return [
     {
       type: "table-input",
       name: "distribution",
-      message: `distirubte your tokens to each vault (total supply : ${answer.initialTotalSupply})`,
-      infoMessage: `Navigate and Edit`,
+      message: `distirubte your tokens to each vault (Total Allocated Token : ${commafy(
+        answer.tokenAllocation
+      )} ${
+        answer.tokenSymbol
+      }) \n Minimum required percentage for each vault: \n
+      - Public : 30%,
+      - Liquidity : 15%,
+      - Ecosystem : 35%,
+      - Team : 15%,
+      - TONStarter: 5%
+      `,
+      infoMessage: `\n Navigate and Edit if you want`,
       hideInfoWhenKeyPressed: true,
       freezeColumns: 1,
       decimalPoint: ".",
@@ -92,91 +144,21 @@ export const getSecondQuestions = (answer: CLI_Answer) => {
       selectedColor: chalk.yellow,
       editableColor: chalk.bgYellow.bold,
       editingColor: chalk.bgGreen.bold,
-      columns: [
-        { name: chalk.cyan.bold("Round"), value: "nf" },
-        { name: chalk.cyan.bold("Public Sale"), value: "nf" },
-        { name: chalk.cyan.bold("Initial Liquidity"), value: "customer" },
-        {
-          name: chalk.cyan.bold(`${answer.tokenSymbol}-TOS`),
-          value: "city",
-          editable: "text",
-        },
-        {
-          name: chalk.cyan.bold("TON-TOS"),
-          value: "quantity",
-          editable: "text",
-        },
-        {
-          name: chalk.cyan.bold("TON Staker"),
-          value: "pricing",
-          editable: "text",
-        },
-        {
-          name: chalk.cyan.bold("TOS Staker"),
-          value: "pricing",
-          editable: "text",
-        },
-      ],
+      columns: generateColumns(),
       rows: [
         [
-          chalk.bold("1"),
-          "Shinji Masumoto",
-          "2024.02.01 17:00",
-          `${answer.projectName}`,
-          `${answer.projectName}`,
-        ],
-        [
-          chalk.bold("2"),
-          "Arnold Mcfee",
-          "New York",
-          `${answer.projectName}`,
-          `${answer.projectName}`,
-        ],
-        [
-          chalk.bold("2"),
-          "Arnold Mcfee",
-          "New York",
-          `${answer.projectName}`,
-          `${answer.projectName}`,
-        ],
-        [
-          chalk.bold("2"),
-          "Arnold Mcfee",
-          "New York",
-          `${answer.projectName}`,
-          `${answer.projectName}`,
-        ],
-        [
-          chalk.bold("2"),
-          "Arnold Mcfee",
-          "New York",
-          `${answer.projectName}`,
-          `${answer.projectName}`,
-        ],
-        [
-          chalk.bold("2"),
-          "Arnold Mcfee",
-          "New York",
-          `${answer.projectName}`,
-          `${answer.projectName}`,
-        ],
-        [
-          chalk.bold("2"),
-          "Arnold Mcfee",
-          "New York",
-          `${answer.projectName}`,
-          `${answer.projectName}`,
-        ],
-        [
-          chalk.bold("2"),
-          "Arnold Mcfee",
-          "New York",
-          `${answer.projectName}`,
-          `${answer.projectName}`,
+          chalk.bold(`Token Allocation (%)`),
+          recalculatedPercentage.Public,
+          recalculatedPercentage.Liquidity,
+          recalculatedPercentage.Ecosystem,
+          recalculatedPercentage.Team,
+          recalculatedPercentage.TONStarter,
         ],
       ],
-      validate: () => false /* See note ¹ */,
-      tranformer: (input: any, answer: any) => {},
+      // validate: () => false /* See note ¹ */,
+      validate: (value: any) => {
+        false;
+      },
     },
   ];
 };
