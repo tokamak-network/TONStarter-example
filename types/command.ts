@@ -6,10 +6,14 @@ export type VaultTypeOnCommand =
   | "Ecosystem"
   | "Team"
   | "TONStarter";
+export type VaultSchedule = {
+  date: number;
+  tokenAllocation: number;
+}[];
 export type VaultCommonParams = {
   tokenAllocation: number;
   //timestamp
-  claimSchedule: number[] | undefined;
+  claimSchedule: VaultSchedule | undefined;
 };
 export type Vaults = { [key in VaultTypeOnCommand]: VaultCommonParams };
 export type CLI_Answer = {
@@ -22,20 +26,29 @@ export type CLI_Answer = {
   round1End: Date;
   round2Start: Date;
   round2End: Date;
-  totalRound: string;
+  claimStart: Date;
+  totalRoundChoice: string;
+  totalRoundInput: string;
+  totalRound: number;
+  roundIntervalUnit: "Monthly" | "Weekly";
+  roundInterval: string;
   totalTokenAllocation: string;
   vaults: Vaults;
 };
 
+export type TableRow = {
+  tokenAllocation_Public: string;
+  tokenAllocation_InitialLiquidity: string;
+  tokenAllocation_Ecosystem: string;
+  tokenAllocation_Team: string;
+  tokenAllocation_TONStarter: string;
+};
+
+export type TableResult = TableRow[];
+
 export type TokenAllocationPerEachVault = {
   tokenAllocationPerEachVault: {
     state: boolean;
-    result: {
-      tokenAllocation_Public: string;
-      tokenAllocation_InitialLiquidity: string;
-      tokenAllocation_Ecosystem: string;
-      tokenAllocation_Team: string;
-      tokenAllocation_TONStarter: string;
-    }[];
+    result: TableResult;
   };
 };

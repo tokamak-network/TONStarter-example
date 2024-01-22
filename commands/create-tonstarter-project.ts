@@ -18,7 +18,7 @@ import {
   Vaults,
 } from "../types/command.js";
 import { firstQuestions, getScheduling, getSecondQuestions } from "./questions";
-import { getValuesFromTokenAllocation } from "../utils/vaults";
+import { getValuesFromTokenAllocation, setUpClaim } from "../utils/vaults";
 // import distributeToken from "../contracts/deploy/2.distribute_token.js";
 
 dotenv.config({ path: "../.env" });
@@ -190,22 +190,39 @@ async function init() {
 
     const answers2 = await inquirer.prompt(secondQuestions);
 
-    console.log("firstAnswers", firstAnswers);
-
-    const answsers = {
+    const secondAnswsers: CLI_Answer = {
       ...firstAnswers,
+      totalRound:
+        firstAnswers.totalRoundChoice === "Other"
+          ? Number(firstAnswers.totalRoundInput)
+          : Number(firstAnswers.totalRoundChoice),
       vaults: getValuesFromTokenAllocation(
         Number(firstAnswers.totalTokenAllocation),
         answers2
       ),
     };
-    const answers3 = await inquirer.prompt(getScheduling(answsers));
+    const answers3 = await inquirer.prompt(getScheduling(secondAnswsers));
+    const scheduledVaults = setUpClaim(
+      answers3.schedule.result,
+      secondAnswsers.vaults
+    );
 
-    if (!answsers.adminAddress || process.env.WALLET_ADDRESS === undefined) {
+    const finalAnswers: CLI_Answer = {
+      ...secondAnswsers,
+      vaults: scheduledVaults,
+    };
+
+    console.log("scheduledVaults", scheduledVaults);
+    console.log("finalAnswers", finalAnswers);
+
+    if (
+      !finalAnswers.adminAddress ||
+      process.env.WALLET_ADDRESS === undefined
+    ) {
       return console.log("The admin account should be defined");
     }
 
-    console.log({ ...answsers, adminAddress: account });
+    console.log({ ...finalAnswers, adminAddress: account });
 
     // const finalCheck = await inquirer.prompt([
     //   {

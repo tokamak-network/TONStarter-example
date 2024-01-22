@@ -4,7 +4,7 @@ import { CLI_Answer, VaultTypesOnI } from "../types";
 import { ethers } from "ethers";
 import commafy from "../utils/commafy";
 import { distributeToken } from "../utils/distributeToken";
-import { comapreDate } from "../utils/date";
+import { comapreDate, getLocalTimeZone } from "../utils/date";
 import { getWallet } from "../utils/wallet";
 import { getVaultSchedule } from "../utils/vaults";
 
@@ -84,17 +84,42 @@ export const firstQuestions = [
   //   message: "When do you like to end Round 2 (for anyone)?",
   // },
   {
+    type: "date",
+    name: "claimStart",
+    message: "When do you like to start a claim-round after sale is done?",
+  },
+  {
     type: "list",
-    name: "totalRound",
+    name: "totalRoundChoice",
     message: "How many rounds do you want to run?",
     choices: ["3", "6", "9", "12", "24", "Other"],
   },
-  // {
-  //   type: "input",
-  //   name: "totalRound2",
-  //   message: "How many rounds do you want to run?",
-  //   when: (answers: CLI_Answer) => answers.totalRound === "Other",
-  // },
+  {
+    type: "input",
+    name: "totalRoundInput",
+    message: "How many rounds do you want to run?",
+    when: (answers: CLI_Answer) => answers.totalRoundChoice === "Other",
+    validate: (value: string) => validateNumberValue(value),
+  },
+  {
+    type: "list",
+    name: "roundIntervalUnit",
+    message: "How would you like to set up claim-interval?",
+    choices: ["Monthly", "Weekly"],
+  },
+  {
+    type: "list",
+    name: "roundInterval",
+    message: "How would you like to set up claim-interval?",
+    choices: (answers: CLI_Answer) => [
+      `1 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
+      `2 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
+      `3 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
+      `4 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
+      `5 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
+      `6 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
+    ],
+  },
 ];
 
 export const getSecondQuestions = (answer: CLI_Answer) => {
@@ -189,37 +214,36 @@ export const getScheduling = (answer: CLI_Answer) => {
     return `${chalk.cyan.bold(title)} (${tokenAllocation} ${
       answer.tokenSymbol
     })`;
-    // return `${chalk.cyan.bold(title)}`;
   };
   const { vaults } = answer;
 
   const generateColumns = () => [
     {
-      name: chalk.cyan.bold("   "),
+      name: chalk.cyan.bold(`Your timezone : ${getLocalTimeZone()}`),
     },
     {
       name: getName("Public", vaults.Public.tokenAllocation),
-      value: "tokenAllocation_Public",
+      value: "Public",
       editable: "number",
     },
     {
       name: getName("Liquidity", vaults.Liquidity.tokenAllocation),
-      value: "tokenAllocation_InitialLiquidity",
+      value: "Liquidity",
       editable: "number",
     },
     {
       name: getName("Ecosystem", vaults.Ecosystem.tokenAllocation),
-      value: "tokenAllocation_ProjectTos",
+      value: "Ecosystem",
       editable: "number",
     },
     {
       name: getName("Team", vaults.Team.tokenAllocation),
-      value: "tokenAllocation_TonTos",
+      value: "Team",
       editable: "number",
     },
     {
       name: getName("TONStarter", vaults.TONStarter.tokenAllocation),
-      value: "pricing",
+      value: "TONStarter",
       editable: "number",
     },
   ];
@@ -227,8 +251,8 @@ export const getScheduling = (answer: CLI_Answer) => {
   return [
     {
       type: "table-input",
-      name: "distribution",
-      message: `distirubte your tokens to each vault (Total Allocated Token : ${commafy(
+      name: "schedule",
+      message: `distirubte your tokens to each claim round (Total Allocated Token : ${commafy(
         answer.totalTokenAllocation
       )} ${
         answer.tokenSymbol
