@@ -5,10 +5,10 @@ function commafy(
 ) {
   const defaultDecilamPoint = decilamPoint ?? 0;
   if (num === undefined || num === null) {
-    return "-";
+    return undefined;
   }
   if (isNaN(Number(num))) {
-    return "-";
+    return undefined;
   }
   if (num === 0 || num === "0") {
     if (defaultDecilamPoint === 0) {

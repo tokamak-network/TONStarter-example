@@ -11,8 +11,14 @@ import DatePrompt from "inquirer-date-prompt";
 // import setTokenOnL2 from "../contracts/deploy/1.set_token_L2.js";
 //@ts-ignore
 import welcomeMsg from "../contracts/utils/welcomeMsg.js";
-import { CLI_Answer, DeployContractStep } from "../types/command.js";
-import { firstQuestions, getSecondQuestions } from "./questions";
+import {
+  CLI_Answer,
+  DeployContractStep,
+  TokenAllocationPerEachVault,
+  Vaults,
+} from "../types/command.js";
+import { firstQuestions, getScheduling, getSecondQuestions } from "./questions";
+import { getValuesFromTokenAllocation } from "../utils/vaults";
 // import distributeToken from "../contracts/deploy/2.distribute_token.js";
 
 dotenv.config({ path: "../.env" });
@@ -178,18 +184,28 @@ async function init() {
     inquirer.registerPrompt("date", DatePrompt);
     inquirer.registerPrompt("table-input", TableInput);
 
-    let firstAnswers = await inquirer.prompt(firstQuestions);
-    console.log("firstAnswers", firstAnswers);
+    const firstAnswers = await inquirer.prompt(firstQuestions);
+
     const secondQuestions = getSecondQuestions(firstAnswers);
-    let answers2 = await inquirer.prompt(secondQuestions);
 
-    const answers = { ...firstAnswers, ...secondQuestions };
+    const answers2 = await inquirer.prompt(secondQuestions);
 
-    if (!answers.adminAddress || process.env.WALLET_ADDRESS === undefined) {
+    console.log("firstAnswers", firstAnswers);
+
+    const answsers = {
+      ...firstAnswers,
+      vaults: getValuesFromTokenAllocation(
+        Number(firstAnswers.totalTokenAllocation),
+        answers2
+      ),
+    };
+    const answers3 = await inquirer.prompt(getScheduling(answsers));
+
+    if (!answsers.adminAddress || process.env.WALLET_ADDRESS === undefined) {
       return console.log("The admin account should be defined");
     }
 
-    console.log({ ...answers, adminAddress: account });
+    console.log({ ...answsers, adminAddress: account });
 
     // const finalCheck = await inquirer.prompt([
     //   {
