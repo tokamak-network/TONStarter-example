@@ -3,11 +3,6 @@ import fs from "fs";
 import dotenv from "dotenv";
 dotenv.config();
 
-const MessageDirection = {
-  L1_TO_L2: 0,
-  L2_TO_L1: 1,
-};
-
 const l1Url = process.env.RPC_SEPOLIA;
 const l2Url = process.env.RPC_TITAN_SEPOLIA;
 
@@ -55,34 +50,6 @@ function promisify(fn) {
 
 const readdirAsync = promisify(fs.readdir);
 
-const readContracts = async (folder) => {
-  let abis = {};
-  let names = [];
-  await readdirAsync(folder).then((filenames) => {
-    for (i = 0; i < filenames.length; i++) {
-      let e = filenames[i];
-      if (e.indexOf(".json") > 0) {
-        names.push(e.substring(0, e.indexOf(".json")));
-        abis[e.substring(0, e.indexOf(".json"))] = require(folder + "/" + e);
-      }
-    }
-  });
-  return { names, abis };
-};
-
-async function deployedContracts(names, abis, provider) {
-  let deployed = {};
-  for (i = 0; i < names.length; i++) {
-    let name = names[i];
-    deployed[name] = new ethers.Contract(
-      abis[name].address,
-      abis[name].abi,
-      provider
-    );
-  }
-  return deployed;
-}
-
 async function getL1Provider() {
   const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1Url);
 
@@ -101,6 +68,9 @@ async function getSigners() {
     const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1EndPoint);
     const l2RpcProvider = new ethers.providers.JsonRpcProvider(l2EndPoint);
     const privateKey = process.env.WALLET_PK;
+
+    if (!privateKey) return undefined;
+
     const l1Wallet = new ethers.Wallet(privateKey, l1RpcProvider);
     const l2Wallet = new ethers.Wallet(privateKey, l2RpcProvider);
 
@@ -191,8 +161,6 @@ const GreeterABI = [
 ];
 
 export {
-  readContracts,
-  deployedContracts,
   getSigners,
   getL1Provider,
   getL2Provider,

@@ -1,23 +1,16 @@
 import { ethers, Contract } from "ethers";
-import lib from "titan.github.io";
+//@ts-ignore
+// import lib from "titan.github.io";
 
 //abis
-import ERC20AJson from "../abis/ERC20A.json" assert { type: "json" };
-import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json" assert { type: "json" };
+import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json";
 import { setup } from "../setup/index.js";
-import { projectInfo as projectInfoTemp } from "../config.js";
+//@ts-ignore
 import { getBlockExplorerWithHash } from "../utils/blockExplorerMsg.js";
-
-// Answers: {
-//   projectName: 'd',
-//   tokenName: 'd',
-//   tokenSymbol: 'd',
-//   initialTotalSupply: '1',
-//   address: true
-// }
+import { CLI_Answer } from "../../types";
 
 /**
- * @typedef {Object} Answers
+ * @typedef {Object} CLI_Answer
  * @property {string} projectName - The name of the project.
  * @property {string} tokenName - The name of the token.
  * @property {string} tokenSymbol - The symbol of the token.
@@ -26,9 +19,9 @@ import { getBlockExplorerWithHash } from "../utils/blockExplorerMsg.js";
  */
 
 /**
- * @param {Answers} answers
+ * @param {Answers}
  */
-async function main(answers) {
+async function main(answers: CLI_Answer) {
   const {
     adminAddress,
     tokenName,
@@ -45,8 +38,12 @@ async function main(answers) {
     tokenSymbol,
     projectName,
   };
-  const GOERLI_CONTRACTS = lib.contracts.tonstarter.goerli;
+  const GOERLI_CONTRACTS = {
+    L1ProjectManagerProxy: "0x",
+  };
   const { l1Signer } = await setup();
+
+  if (!l1Signer) return;
 
   const L1ProjectManager = new Contract(
     GOERLI_CONTRACTS.L1ProjectManagerProxy,
@@ -104,12 +101,16 @@ async function main(answers) {
 /**
  * @param {Answers} answers
  */
-async function createProjectL1(answers) {
-  const result = await main(answers).catch((e) => {
-    console.log("**err at main()**", e);
-    process.exitCode = 1;
-  });
-  return result;
+async function createProjectL1(answers: CLI_Answer): Promise<boolean> {
+  try {
+    await main(answers).catch((e) => {
+      console.log("**err at main()**", e);
+      process.exitCode = 1;
+    });
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 export default createProjectL1;
