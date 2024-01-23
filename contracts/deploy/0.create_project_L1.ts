@@ -4,11 +4,11 @@ import { ethers, Contract } from "ethers";
 
 //abis
 import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json";
-import { setup } from "../setup/index.js";
 import { getBlockExplorerWithHash } from "../utils/blockExplorerMsg.js";
-import { CLI_Answer } from "../../types";
+import { CLI_Answer, Deployed } from "../../types";
 import { addressManager } from "../../constants/common_func";
 import { DeployedProjectInfo } from "../../types";
+import { ZERO_ADDRESS, walletSetup } from "../../constants";
 
 /**
  * @typedef {Object} CLI_Answer
@@ -41,11 +41,12 @@ async function main(answers: CLI_Answer) {
     projectName,
     projectId: undefined,
     l1Token: undefined,
+    l2Token: undefined,
   };
   const GOERLI_CONTRACTS = {
     L1ProjectManagerProxy: "0x3eD0776A8E323a294cd704c02a349ca1B83554da",
   };
-  const { l1Signer } = await setup();
+  const { l1Signer } = await walletSetup();
 
   if (!l1Signer) return;
 
@@ -81,6 +82,7 @@ async function main(answers: CLI_Answer) {
   const deployedEvent = L1ProjectManager.interface.parseLog(log);
   projectInfo.projectId = deployedEvent.args.projectId;
   projectInfo.l1Token = deployedEvent.args.l1Token;
+  projectInfo.l2Token = ZERO_ADDRESS;
 
   // const tokenContract = new ethers.Contract(
   //   projectInfo.l1Token,
@@ -105,9 +107,7 @@ async function main(answers: CLI_Answer) {
 /**
  * @param {Answers} answers
  */
-async function createProjectL1(
-  answers: CLI_Answer
-): Promise<{ state: boolean; result?: DeployedProjectInfo }> {
+async function createProjectL1(answers: CLI_Answer): Promise<Deployed> {
   try {
     const result = await main(answers);
     return { state: true, result };

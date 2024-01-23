@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import commafy from "../utils/commafy";
 import { distributeToken } from "../utils/distributeToken";
 import { comapreDate, getLocalTimeZone } from "../utils/date";
-import { getWallet } from "../utils/wallet";
+import { getWallet } from "../constants/environment";
 import { getVaultSchedule } from "../utils/vaults";
 
 dotenv.config();

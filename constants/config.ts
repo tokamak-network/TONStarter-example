@@ -5,4 +5,6 @@ const blockExplorer = {
   titanSepolia: "https://explorer.titan-goerli.tokamak.network",
 };
 
-export { blockExplorer };
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+export { blockExplorer, ZERO_ADDRESS };

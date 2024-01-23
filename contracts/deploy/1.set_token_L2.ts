@@ -1,40 +1,22 @@
 import { Contract } from "ethers";
-import lib from "titan.github.io";
+// import lib from "titan.github.io";
 
 //abis
-import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json" assert { type: "json" };
-import L2ProjectManagerJson from "../abis/titan-goerli/L2ProjectManager.json" assert { type: "json" };
-import L2TokenFactoryJson from "../abis/titan-goerli/L2TokenFactory-old.json" assert { type: "json" };
-import { setup } from "../setup/index.js";
+import L2TokenFactoryJson from "../abis/titan-goerli/L2TokenFactory-old.json";
 import { getBlockExplorerWithHash } from "../utils/blockExplorerMsg.js";
-import { ethers, BigNumber } from "ethers";
-import { addressManager } from "../scripts/common_func.js";
+import { Deployed, DeployedProjectInfo } from "../../types";
+import { ZERO_ADDRESS, walletSetup } from "../../constants";
 
-const testData = {
-  projectId: "06",
-  tokenOwner: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-  projectOwner: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
-  initialTotalSupply: "100",
-  tokenType: 0,
-  projectName: "test",
-  tokenName: "test",
-  tokenSymbol: "test",
-  l1Token: "0x4cB14C88233346c32e922d6F791c96eDBfbE74FA",
-  l2Token: "0x0000000000000000000000000000000000000000",
-  l2Type: 0,
-  addressManager: "0xEFa07e4263D511fC3a7476772e2392efFb1BDb92",
-};
 // set L2 Token
-async function main(project) {
-  const TITAN_GOERLI_CONTRACTS = lib.contracts.tonstarter["titan-goerli"];
-
-  const { l2Signer } = await setup();
+async function main(project: DeployedProjectInfo) {
+  // const TITAN_GOERLI_CONTRACTS = lib.contracts.tonstarter["titan-goerli"];
+  const TITAN_GOERLI_CONTRACTS = {
+    L2TokenFactory: "0x42773cf37d7e2757a41d14ca130cd1ac8ac5064a",
+  };
+  const { l2Signer } = await walletSetup();
   let projectInfo = project;
 
-  if (
-    projectInfo.l2Token == "0x0000000000000000000000000000000000000000" &&
-    l2Signer
-  ) {
+  if (projectInfo.l2Token == ZERO_ADDRESS && l2Signer) {
     const L2TokenFactory = new Contract(
       TITAN_GOERLI_CONTRACTS.L2TokenFactory,
       L2TokenFactoryJson.abi,
@@ -61,21 +43,26 @@ async function main(project) {
     const topic = L2TokenFactory.interface.getEventTopic(
       "StandardL2TokenCreated"
     );
-    const log = receipt.logs.find((x) => x.topics.indexOf(topic) >= 0);
+    const log = receipt.logs.find((x: any) => x.topics.indexOf(topic) >= 0);
     const deployedEvent = L2TokenFactory.interface.parseLog(log);
 
     projectInfo.l2Token = deployedEvent.args.l2Token;
     return projectInfo;
   }
-  return console.log("Already set l2Token");
+  throw new Error("Already set l2Token");
 }
 
-async function setTokenOnL2(projectInfo) {
-  const result = await main(projectInfo).catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-  });
-  return result;
+async function setTokenOnL2(
+  projectInfo: DeployedProjectInfo | undefined
+): Promise<Deployed> {
+  try {
+    if (!projectInfo)
+      throw new Error("projectInfo is undefined at setTokenOnL2");
+    const result = await main(projectInfo);
+    return { state: true, result };
+  } catch (e) {
+    return { state: false };
+  }
 }
 
 export default setTokenOnL2;

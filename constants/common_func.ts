@@ -3,9 +3,6 @@ import fs from "fs";
 import dotenv from "dotenv";
 dotenv.config();
 
-const l1Url = process.env.RPC_SEPOLIA;
-const l2Url = process.env.RPC_TITAN_SEPOLIA;
-
 const bridge = {
   l1Bridge: "0x7377F3D0F64d7a54Cf367193eb74a052ff8578FD",
   l2Bridge: "0x4200000000000000000000000000000000000010",
@@ -27,36 +24,6 @@ const lockTos = {
   l1LockTOS: "0x63689448AbEaaDb57342D9e0E9B5535894C35433",
   l2LockTOS: "",
 };
-
-async function getL1Provider() {
-  const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1Url);
-
-  return l1RpcProvider;
-}
-
-async function getL2Provider() {
-  const l2RpcProvider = new ethers.providers.JsonRpcProvider(l2Url);
-  return l2RpcProvider;
-}
-
-async function getSigners() {
-  try {
-    const l1EndPoint = process.env.RPC_SEPOLIA;
-    const l2EndPoint = process.env.RPC_TITAN_SEPOLIA;
-    const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1EndPoint);
-    const l2RpcProvider = new ethers.providers.JsonRpcProvider(l2EndPoint);
-    const privateKey = process.env.WALLET_PK;
-
-    if (!privateKey) return undefined;
-
-    const l1Wallet = new ethers.Wallet(privateKey, l1RpcProvider);
-    const l2Wallet = new ethers.Wallet(privateKey, l2RpcProvider);
-
-    return { l1Wallet, l2Wallet };
-  } catch (e) {
-    console.log("**err at getSigners()**", e);
-  }
-} // getSigners
 
 const erc20ABI = [
   // balanceOf
@@ -139,9 +106,6 @@ const GreeterABI = [
 ];
 
 export {
-  getSigners,
-  getL1Provider,
-  getL2Provider,
   bridge,
   messenger,
   addressManager,

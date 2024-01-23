@@ -1,4 +1,9 @@
-export type DeployContractStep = 1 | 2 | 3;
+export type DeployContractStep =
+  | "CreateProjectOnL1"
+  | "SetTokenOnL2"
+  | "SetUpVaults"
+  | "Done"
+  | "Error";
 export type DeployStatus = "isLoading" | "error" | "";
 export type VaultTypeOnCommand =
   | "Public"

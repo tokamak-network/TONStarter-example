@@ -1,18 +1,16 @@
-import ora, { Ora } from "ora";
-import dotenv from "dotenv";
-
 // import createProjectL1 from "../contracts/deploy/0.create_project_L1.js";
 // import setTokenOnL2 from "../contracts/deploy/1.set_token_L2.js";
 //@ts-ignore
 import welcomeMsg from "../contracts/utils/welcomeMsg.js";
-import { getWallet } from "../utils/wallet";
-import { CreateProject, DeployProjectL1 } from "./deployProject";
+import { getWallet } from "../constants/environment.js";
+import {
+  CreateProject,
+  DeployProjectOnL1,
+  SetTokenOnL2,
+} from "./deployProject";
 import { createCliAnswers } from "./createCliAnswers";
 
-dotenv.config({ path: "../.env" });
-
-const privateKey = process.env.WALLET_PK;
-const wallet = getWallet(privateKey);
+const wallet = getWallet();
 const accountAddress = wallet?.address;
 
 /** @typedef {("React", "Nextjs", "Remix")} Framework */
@@ -104,12 +102,13 @@ async function init() {
 
     //start to deploy contracts through toolkit
     const CLI = new CreateProject(cliAnswers);
-    console.log(CLI.step);
+    const deployOnL1 = new DeployProjectOnL1(CLI);
+    const setTokenOnL2 = new SetTokenOnL2(CLI);
 
-    const deployOnL1 = new DeployProjectL1(CLI);
-    await deployOnL1.deployProject();
-    console.log(CLI.step);
-
+    CLI.addStepChangeListener([deployOnL1, setTokenOnL2]);
+    const dd = await CLI.start();
+    console.log("**d**");
+    console.log(dd);
     // const finalCheck = await inquirer.prompt([
     //   {
     //     type: "confirm",
