@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { addressManager } from "./scripts/common_func.js";
+import { addressManager } from "../constants/common_func.js";
 
 /**
  * @description this is default project value for scripts

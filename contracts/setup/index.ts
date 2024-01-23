@@ -1,5 +1,5 @@
 import { Wallet } from "ethers";
-import { getSigners } from "../scripts/common_func.js";
+import { getSigners } from "../../constants/common_func.js";
 import dotenv from "dotenv";
 dotenv.config();
 

@@ -8,5 +8,5 @@
     "resolveJsonModule": true,
     "outDir": "dist"
   },
-  "include": ["commands", "contracts", "src"]
+  "include": ["commands", "contracts/**/*", "src", "constants"]
 }

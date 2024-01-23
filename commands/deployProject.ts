@@ -1,6 +1,6 @@
 import { CLI_Answer, DeployContractStep } from "../types";
 import { animateEllipsis } from "../utils/consoleUI";
-import createProjectL1 from "../contracts/deploy/0.create_project_L1.js";
+import createProjectL1 from "../contracts/deploy/0.create_project_L1";
 
 type Params = any;
 

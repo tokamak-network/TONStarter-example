@@ -23,35 +23,35 @@ function validateNumberValue(value: any) {
 }
 
 export const firstQuestions = [
-  // {
-  //   type: "confirm",
-  //   name: "adminAddress",
-  //   message: `Are you certain about using this account as the project owner? (${chalk.redBright(
-  //     wallet?.address
-  //   )})`,
-  //   validate: (value: string) => ethers.utils.isAddress(value),
-  // },
-  // {
-  //   type: "input",
-  //   name: "projectName",
-  //   message: "Enter your project name:",
-  // },
-  // {
-  //   type: "input",
-  //   name: "tokenName",
-  //   message: "Enter your token name:",
-  // },
-  // {
-  //   type: "input",
-  //   name: "tokenSymbol",
-  //   message: "Enter your token symbol:",
-  // },
-  // {
-  //   type: "input",
-  //   name: "initialTotalSupply",
-  //   message: "Enter initial total supply of your token:",
-  //   validate: (value: string) => validateNumberValue(value),
-  // },
+  {
+    type: "confirm",
+    name: "adminAddress",
+    message: `Are you certain about using this account as the project owner? (${chalk.redBright(
+      wallet?.address
+    )})`,
+    validate: (value: string) => ethers.utils.isAddress(value),
+  },
+  {
+    type: "input",
+    name: "projectName",
+    message: "Enter your project name:",
+  },
+  {
+    type: "input",
+    name: "tokenName",
+    message: "Enter your token name:",
+  },
+  {
+    type: "input",
+    name: "tokenSymbol",
+    message: "Enter your token symbol:",
+  },
+  {
+    type: "input",
+    name: "initialTotalSupply",
+    message: "Enter initial total supply of your token:",
+    validate: (value: string) => validateNumberValue(value),
+  },
   {
     type: "input",
     name: "totalTokenAllocation",
@@ -61,28 +61,28 @@ export const firstQuestions = [
       )} ${chalk.greenBright(answers.tokenSymbol)}) :`,
     validate: (value: string) => validateNumberValue(value),
   },
-  // {
-  //   type: "date",
-  //   name: "round1Start",
-  //   message: "When do you like to start Round 1 (for STOS holders)?",
-  // },
-  // {
-  //   type: "date",
-  //   name: "round1End",
-  //   message: "When do you like to end Round 1 (for STOS holders)?",
-  //   validate: (endDate: Date, answers: CLI_Answer) =>
-  //     comapreDate(endDate, answers.round1Start),
-  // },
-  // {
-  //   type: "date",
-  //   name: "round2Start",
-  //   message: "When do you like to start Round 2 (for anyone)?",
-  // },
-  // {
-  //   type: "date",
-  //   name: "round2End",
-  //   message: "When do you like to end Round 2 (for anyone)?",
-  // },
+  {
+    type: "date",
+    name: "round1Start",
+    message: "When do you like to start Round 1 (for STOS holders)?",
+  },
+  {
+    type: "date",
+    name: "round1End",
+    message: "When do you like to end Round 1 (for STOS holders)?",
+    validate: (endDate: Date, answers: CLI_Answer) =>
+      comapreDate(endDate, answers.round1Start),
+  },
+  {
+    type: "date",
+    name: "round2Start",
+    message: "When do you like to start Round 2 (for anyone)?",
+  },
+  {
+    type: "date",
+    name: "round2End",
+    message: "When do you like to end Round 2 (for anyone)?",
+  },
   {
     type: "date",
     name: "claimStart",

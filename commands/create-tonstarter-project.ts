@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import welcomeMsg from "../contracts/utils/welcomeMsg.js";
 import { getWallet } from "../utils/wallet";
 import { CreateProject, DeployProjectL1 } from "./deployProject";
-import { createCliAnswers } from "./createCliAnswers.js";
+import { createCliAnswers } from "./createCliAnswers";
 
 dotenv.config({ path: "../.env" });
 
