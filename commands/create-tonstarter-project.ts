@@ -26,47 +26,8 @@ const accountAddress = wallet?.address;
 
 */
 
-// async function init() {
-//   welcomeMsg();
-//   console.log("Starting to create a TONStarter project...");
-
-//   try {
-//     let answers = await inquirer.prompt(questions);
-//     if (!answers.adminAddress || process.env.WALLET_ADDRESS === undefined) {
-//       return console.log("The admin account should be defined");
-//     }
-
-//     console.log({ ...answers, adminAddress: account });
-
-//     const finalCheck = await inquirer.prompt([
-//       {
-//         type: "confirm",
-//         name: "finalCheck",
-//         message: `Are you certain you want to deploy your project with the provided data?}`,
-//       },
-//     ]);
-
-//     if (!finalCheck.finalCheck) {
-//       console.error("Oops, please try it again with new parameters you want");
-//       return Error();
-//     }
-
 //     answers = { ...answers, adminAddress: process.env.WALLET_ADDRESS };
 //     const spinner0 = ora("Deploying a project on L1...").start();
-
-//     const deployedProject = await animateEllipsis(
-//       "Deploying a project on L1...",
-//       () => createProjectL1(answers),
-//       400
-//     );
-
-//     // await new Promise((resolve) => setTimeout(resolve, 10000));
-
-//     const setTokens = await animateEllipsis(
-//       "Setting your token on L2...",
-//       () => setTokenOnL2(deployedProject),
-//       400
-//     );
 
 //     const distributedTokens = await animateEllipsis(
 //       "Distributing tokens to each vault on L1...",
@@ -106,28 +67,13 @@ async function init() {
     const setTokenOnL2 = new SetTokenOnL2(CLI);
 
     CLI.addStepChangeListener([deployOnL1, setTokenOnL2]);
-    const dd = await CLI.start();
-    console.log("**d**");
-    console.log(dd);
-    // const finalCheck = await inquirer.prompt([
-    //   {
-    //     type: "confirm",
-    //     name: "finalCheck",
-    //     message: `Are you certain you want to deploy your project with the provided data?}`,
-    //   },
-    // ]);
+    const deployed = await CLI.start();
 
-    // if (!finalCheck.finalCheck) {
-    //   console.error("Oops, please try it again with new parameters you want");
-    //   return Error();
-    // }
-
-    // answers = { ...answers, adminAddress: process.env.WALLET_ADDRESS };
-    // const spinner0 = ora("Deploying a project on L1...").start();
-
-    console.log(
-      "🚀All process is done. You just need to wait for depositing your tokens."
-    );
+    if (deployed) {
+      return console.log(
+        "🚀All process is done. You just need to wait for depositing your tokens."
+      );
+    }
   } catch (error: unknown) {
     if (error instanceof Error) console.error("Error:", error.message);
     process.exit(1); // Exit the process if there's an error in the input

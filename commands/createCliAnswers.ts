@@ -46,5 +46,18 @@ export const createCliAnswers = async (
     vaults: scheduledVaults,
   };
 
+  // const finalCheck = await inquirer.prompt([
+  //   {
+  //     type: "confirm",
+  //     name: "finalCheck",
+  //     message: `Are you certain you want to deploy your project with the provided data?}`,
+  //   },
+  // ]);
+
+  //     if (!finalCheck.finalCheck) {
+  //       console.error("Oops, please try it again with new parameters you want");
+  //       return Error();
+  //     }
+
   return finalCliAnswers;
 };

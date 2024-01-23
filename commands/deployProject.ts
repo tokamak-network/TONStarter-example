@@ -156,14 +156,20 @@ export class CreateProject {
       this.notifyStepChange(this._step);
 
       await new Promise<void>((resolve) => {
-        if (this._step === "Done" || this._step === "Error") {
-          resolve();
-        }
+        const checkStep = () => {
+          if (this._step === "Done" || this._step === "Error") {
+            resolve();
+          } else {
+            setTimeout(checkStep, 100);
+          }
+        };
+
+        checkStep();
       });
 
       return this._step === "Done";
     } catch (e) {
-      console.log(e);
+      throw e;
     }
   }
 }
