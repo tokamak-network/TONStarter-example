@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import chalk from "chalk";
 import { CLI_Answer, VaultTypesOnI } from "../types";
 import { ethers } from "ethers";
@@ -8,10 +7,7 @@ import { comapreDate, getLocalTimeZone } from "../utils/date";
 import { getWallet } from "../constants/environment";
 import { getVaultSchedule } from "../utils/vaults";
 
-dotenv.config();
-
-const privateKey = process.env.WALLET_PK;
-const wallet = getWallet(privateKey);
+const wallet = getWallet();
 
 function validateNumberValue(value: any) {
   const valid =
@@ -58,7 +54,25 @@ export const firstQuestions = [
     message: (answers: CLI_Answer) =>
       `How many token do you want to allocate for this IDO (You are planning to mint ${chalk.greenBright(
         commafy(answers.initialTotalSupply)
-      )} ${chalk.greenBright(answers.tokenSymbol)}) :`,
+      )} ${chalk.greenBright(answers.tokenSymbol)}) ?`,
+    validate: (value: string) => validateNumberValue(value),
+  },
+  {
+    type: "input",
+    name: "tokenPrice",
+    message: async (answers: CLI_Answer) => {
+      const tosPriceResponse = await fetch(
+        "https://price-api.tokamak.network/tosprice"
+      );
+      const tosPriceData = await tosPriceResponse.json();
+
+      console.log(
+        `How do you set the token price relative to 1 TOS (TOS price : ${chalk.greenBright(
+          `$${commafy(tosPriceData, 2)}`
+        )})?`
+      );
+      return `For example : if you enter 10, then your 10 ${answers.tokenSymbol} will have same price as 1 TOS. Enter : `;
+    },
     validate: (value: string) => validateNumberValue(value),
   },
   {
@@ -112,12 +126,12 @@ export const firstQuestions = [
     name: "roundInterval",
     message: "How would you like to set up claim-interval?",
     choices: (answers: CLI_Answer) => [
-      `1 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
-      `2 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
-      `3 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
-      `4 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
-      `5 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
-      `6 ${answers.roundIntervalUnit.replaceAll("ly", "")}`,
+      `1 ${answers.roundIntervalUnit.replace("ly", "")}`,
+      `2 ${answers.roundIntervalUnit.replace("ly", "")}`,
+      `3 ${answers.roundIntervalUnit.replace("ly", "")}`,
+      `4 ${answers.roundIntervalUnit.replace("ly", "")}`,
+      `5 ${answers.roundIntervalUnit.replace("ly", "")}`,
+      `6 ${answers.roundIntervalUnit.replace("ly", "")}`,
     ],
   },
 ];

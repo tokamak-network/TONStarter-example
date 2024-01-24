@@ -38,6 +38,7 @@ export type CLI_Answer = {
   roundIntervalUnit: "Monthly" | "Weekly";
   roundInterval: string;
   totalTokenAllocation: string;
+  tokenPrice: string;
   vaults: Vaults;
 };
 
