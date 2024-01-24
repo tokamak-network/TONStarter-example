@@ -9,6 +9,7 @@ import {
   SetTokenOnL2,
 } from "./deployProject";
 import { createCliAnswers } from "./createCliAnswers";
+import { cloneTemplate } from "./cloneTemplate.js";
 
 const wallet = getWallet();
 const accountAddress = wallet?.address;
@@ -70,9 +71,10 @@ async function init() {
     const deployed = await CLI.start();
 
     if (deployed) {
-      return console.log(
-        "🚀All process is done. You just need to wait for depositing your tokens."
-      );
+      return cloneTemplate();
+      // return console.log(
+      //   "🚀All process is done. You just need to wait for depositing your tokens."
+      // );
     }
   } catch (error: unknown) {
     if (error instanceof Error) console.error("Error:", error.message);

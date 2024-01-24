@@ -2,7 +2,7 @@ import { execSync } from "child_process";
 import fs from "fs-extra";
 import { spawn } from "cross-spawn";
 
-const cloneTemplate = () => {
+export const cloneTemplate = () => {
   const folderName = "myProject";
   if (fs.existsSync(folderName)) {
     fs.rmSync(folderName, { recursive: true });
@@ -69,5 +69,3 @@ const cloneTemplate = () => {
     });
   }, 1000);
 };
-
-cloneTemplate();

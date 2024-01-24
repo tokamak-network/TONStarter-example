@@ -23,7 +23,7 @@ export const firstQuestions = [
     type: "confirm",
     name: "adminAddress",
     message: `Are you certain about using this account as the project owner? (${chalk.redBright(
-      wallet?.address
+      wallet?.address as string
     )})`,
     validate: (value: string) => ethers.utils.isAddress(value),
   },
@@ -71,7 +71,9 @@ export const firstQuestions = [
           `$${commafy(tosPriceData, 2)}`
         )})?`
       );
-      return `For example : if you enter 10, then your 10 ${answers.tokenSymbol} will have same price as 1 TOS. Enter : `;
+      return `For example : if you enter 10, then your ${chalk.blueBright(
+        `10 ${answers.tokenSymbol.toUpperCase()}`
+      )} will have same price as ${chalk.blueBright(`1 TOS`)}. Enter : `;
     },
     validate: (value: string) => validateNumberValue(value),
   },

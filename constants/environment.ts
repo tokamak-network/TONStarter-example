@@ -1,6 +1,6 @@
 import { ethers, Wallet } from "ethers";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
 const l1Url = process.env.RPC_SEPOLIA;
 const l2Url = process.env.RPC_TITAN_SEPOLIA;
