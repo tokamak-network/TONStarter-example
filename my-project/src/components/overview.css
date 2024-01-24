@@ -1,0 +1,21 @@
+.progress-container {
+  width: 800px; /* Adjust width as needed */
+  height: 16px; /* Adjust height as needed */
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  background-color: #f1f5f9;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #0070ed; /* Adjust the color of the progress bar */
+  transition: width 0.3s ease-in-out; /* Smooth animation on width 
+  change */
+  border-radius: 16px;
+}
+
+/* Additional styling for the button (optional) */
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+}

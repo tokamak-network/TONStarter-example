@@ -1,46 +1,73 @@
-// your-script.js
-
 import { execSync } from "child_process";
-import fs from "fs";
+import fs from "fs-extra";
+import { spawn } from "cross-spawn";
 
-const init = () => {
-  // 폴더 생성
+const cloneTemplate = () => {
   const folderName = "myProject";
-  if (!fs.existsSync(folderName)) {
-    fs.mkdirSync(folderName);
+  if (fs.existsSync(folderName)) {
+    fs.rmSync(folderName, { recursive: true });
   }
+  fs.mkdirSync(folderName);
 
-  // 클론 명령어 실행 (git sparse-checkout 사용)
   execSync(
     `git clone --filter=blob:none https://github.com/tokamak-network/TONStarter-sdk.git ${folderName}`
   );
   process.chdir(folderName);
-  // .git/info/sparse-checkout 파일에 원하는 디렉토리 명시
   fs.writeFileSync(".git/info/sparse-checkout", "packages/basic");
-  // 추가적인 설정이 필요할 경우
   execSync("git config core.sparseCheckout true");
-  // 다운로드 받은 파일을 가져옴
   execSync("git checkout main");
-  console.log("go4");
-  // 클론한 디렉토리로 이동
-  //   process.chdir(folderName);
-
-  //   // 프로젝트 시작 명령어 실행
-  //   execSync("npm start");
-
-  // myProject/packages/basic를 다른 경로로 이동
 
   const newPath = "test";
-  if (!fs.existsSync(newPath)) {
-    fs.mkdirSync(newPath, { recursive: true });
-  }
-  fs.mkdirSync(newPath, { recursive: true });
+  //   if (!fs.existsSync(newPath)) {
+  //     fs.mkdirSync(newPath, { recursive: true });
+  //   }
+  //   fs.mkdirSync(newPath, { recursive: true });
 
   // myProject/packages/basic를 newPath로 이동
-  fs.renameSync(`packages/basic`, `test`);
+  fs.moveSync(`packages/basic`, `../../my-project`, { overwrite: true });
+
+  process.chdir("../");
 
   // myProject 폴더 삭제
-  fs.rmdirSync(folderName, { recursive: true });
+  fs.rmSync(folderName, { recursive: true });
+
+  setTimeout(() => {
+    process.chdir("../");
+    process.chdir("my-project");
+
+    const npmInstall = spawn("npm", ["install", "--verbose"]);
+
+    npmInstall.stdout.on("data", (data) => {
+      // Print the output to the console
+      console.log(data.toString());
+    });
+
+    npmInstall.stderr.on("data", (data) => {
+      // Print error output to the console
+      console.error(data.toString());
+    });
+
+    npmInstall.on("close", (code) => {
+      if (code === 0) {
+        console.log("npm install completed successfully.");
+
+        // execSync("npm start");
+        console.log("Running npm start...");
+        const npmStart = spawn("npm", ["start", "--verbose"], {
+          stdio: "inherit",
+        });
+        npmStart.on("close", (code) => {
+          if (code === 0) {
+            console.log("npm start completed successfully.");
+          } else {
+            console.error(`npm start failed with code ${code}`);
+          }
+        });
+      } else {
+        console.error(`npm install failed with code ${code}`);
+      }
+    });
+  }, 1000);
 };
 
-init();
+cloneTemplate();
