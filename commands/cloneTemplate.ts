@@ -37,15 +37,15 @@ export const cloneTemplate = () => {
 
     const npmInstall = spawn("npm", ["install", "--verbose"]);
 
-    npmInstall.stdout.on("data", (data) => {
-      // Print the output to the console
-      console.log(data.toString());
-    });
+    // npmInstall.stdout.on("data", (data) => {
+    //   // Print the output to the console
+    //   console.log(data.toString());
+    // });
 
-    npmInstall.stderr.on("data", (data) => {
-      // Print error output to the console
-      console.error(data.toString());
-    });
+    // npmInstall.stderr.on("data", (data) => {
+    //   // Print error output to the console
+    //   console.error(data.toString());
+    // });
 
     npmInstall.on("close", (code) => {
       if (code === 0) {

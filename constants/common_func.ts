@@ -1,8 +1,3 @@
-import ethers from "ethers";
-import fs from "fs";
-import dotenv from "dotenv";
-dotenv.config();
-
 const bridge = {
   l1Bridge: "0x7377F3D0F64d7a54Cf367193eb74a052ff8578FD",
   l2Bridge: "0x4200000000000000000000000000000000000010",

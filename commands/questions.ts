@@ -6,6 +6,7 @@ import { distributeToken } from "../utils/distributeToken";
 import { comapreDate, getLocalTimeZone } from "../utils/date";
 import { getWallet } from "../constants/environment";
 import { getVaultSchedule } from "../utils/vaults";
+import { getTonPrice } from "../utils/price";
 
 const wallet = getWallet();
 
@@ -61,19 +62,13 @@ export const firstQuestions = [
     type: "input",
     name: "tokenPrice",
     message: async (answers: CLI_Answer) => {
-      const tosPriceResponse = await fetch(
-        "https://price-api.tokamak.network/tosprice"
-      );
-      const tosPriceData = await tosPriceResponse.json();
-
+      const tonPrice = await getTonPrice();
       console.log(
-        `How do you set the token price relative to 1 TOS (TOS price : ${chalk.greenBright(
-          `$${commafy(tosPriceData, 2)}`
+        `How do you set the token price relative to 1 TON (TON price : ${chalk.greenBright(
+          `$${commafy(tonPrice, 2)}`
         )})?`
       );
-      return `For example : if you enter 10, then your ${chalk.blueBright(
-        `10 ${answers.tokenSymbol.toUpperCase()}`
-      )} will have same price as ${chalk.blueBright(`1 TOS`)}. Enter : `;
+      return `For example : if you enter 10, then your 10 ${answers.tokenSymbol} will have same price as 1 TON. Enter : `;
     },
     validate: (value: string) => validateNumberValue(value),
   },

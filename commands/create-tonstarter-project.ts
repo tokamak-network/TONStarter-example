@@ -24,7 +24,6 @@ const accountAddress = wallet?.address;
  @param {Framework} answers.framwork
  @param {string} answers.langauge
  @param {string} answers.adminAddress
-
 */
 
 //     answers = { ...answers, adminAddress: process.env.WALLET_ADDRESS };
