@@ -1,8 +1,9 @@
 import { execSync } from "child_process";
 import fs from "fs-extra";
 import { spawn } from "cross-spawn";
+import { DeployedProjectInfo } from "../types";
 
-export const cloneTemplate = () => {
+export const cloneTemplate = (projectInfo: DeployedProjectInfo) => {
   const folderName = "myProject";
   if (fs.existsSync(folderName)) {
     fs.rmSync(folderName, { recursive: true });
@@ -10,7 +11,7 @@ export const cloneTemplate = () => {
   fs.mkdirSync(folderName);
 
   execSync(
-    `git clone --filter=blob:none https://github.com/tokamak-network/TONStarter-sdk.git ${folderName}`
+    `git clone --filter=blob:none https://github.com/tokamak-network/TONStarter-templates.git ${folderName}`
   );
   process.chdir(folderName);
   fs.writeFileSync(".git/info/sparse-checkout", "packages/basic");
@@ -37,19 +38,27 @@ export const cloneTemplate = () => {
 
     const npmInstall = spawn("npm", ["install", "--verbose"]);
 
-    // npmInstall.stdout.on("data", (data) => {
-    //   // Print the output to the console
-    //   console.log(data.toString());
-    // });
+    npmInstall.stdout.on("data", (data) => {
+      // Print the output to the console
+      console.log(data.toString());
+    });
 
-    // npmInstall.stderr.on("data", (data) => {
-    //   // Print error output to the console
-    //   console.error(data.toString());
-    // });
+    npmInstall.stderr.on("data", (data) => {
+      // Print error output to the console
+      console.error(data.toString());
+    });
 
     npmInstall.on("close", (code) => {
       if (code === 0) {
         console.log("npm install completed successfully.");
+
+        const envVariables = `
+REACT_APP_MODE=DEV
+REACT_APP_L2TOKEN=${projectInfo.l2Token}
+REACT_APP_TITAN_PROVIDER=https://rpc.titan-goerli.tokamak.network
+`;
+        fs.writeFileSync(".env", envVariables, "utf-8");
+        console.log(".env file created successfully.");
 
         // execSync("npm start");
         console.log("Running npm start...");

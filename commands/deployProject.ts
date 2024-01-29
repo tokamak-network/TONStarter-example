@@ -29,8 +29,6 @@ export class SetTokenOnL2 implements I_StepListener {
   async deployProject(step: DeployContractStep): Promise<DeployProject> {
     try {
       if (step !== "SetTokenOnL2") return { state: false };
-      console.log("step2 go");
-      console.log("params", this.createProjectStatus.projectInfo);
       const deployedProject = await animateEllipsis(
         "Setting your token on L2...",
         () => setTokenOnL2(this.createProjectStatus.projectInfo),

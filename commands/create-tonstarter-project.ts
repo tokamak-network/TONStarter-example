@@ -69,8 +69,8 @@ async function init() {
     CLI.addStepChangeListener([deployOnL1, setTokenOnL2]);
     const deployed = await CLI.start();
 
-    if (deployed) {
-      return cloneTemplate();
+    if (deployed && CLI.projectInfo) {
+      return cloneTemplate(CLI.projectInfo);
       // return console.log(
       //   "🚀All process is done. You just need to wait for depositing your tokens."
       // );
