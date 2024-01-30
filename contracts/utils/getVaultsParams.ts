@@ -1,68 +1,100 @@
 import { ethers, BigNumber } from "ethers";
 
-const getPublicSaleParams = (
-  tier: Array<number>,
-  percents: Array<number>,
-  saleAmount: Array<number>,
-  price: Array<number>,
-  hardcapAmount: number,
-  changeTOSPercent: number,
-  times: Array<number>,
-  claimCounts: number,
-  claimTimes: Array<number>,
-  claimPercents: Array<number>
-) => {
+const formatAmount = (amount: number) => {
+  return ethers.utils.parseUnits(String(amount), 18);
+};
+
+export const getPublicSaleParams = (params: {
+  tier: Array<number>;
+  percents: Array<number>;
+  saleAmount: Array<number>;
+  price: Array<number>;
+  hardcapAmount: number;
+  changeTOSPercent: number;
+  times: Array<number>;
+  claimCounts: number;
+  firstClaimPercent: number;
+  firstClaimTime: number;
+  secondClaimTime: number;
+  roundInterval: number;
+  receiveAddress: string;
+  vestingClaimCounts: number;
+  vestingfirstClaimPercent: number;
+  vestingClaimTime1: number;
+  vestingClaimTime2: number;
+  vestingRoundInterval: number;
+  fee: number;
+}) => {
+  const {
+    tier,
+    percents,
+    saleAmount,
+    price,
+    hardcapAmount,
+    changeTOSPercent,
+    times,
+    claimCounts,
+    firstClaimPercent,
+    firstClaimTime,
+    secondClaimTime,
+    roundInterval,
+    receiveAddress,
+    vestingClaimCounts,
+    vestingfirstClaimPercent,
+    vestingClaimTime1,
+    vestingClaimTime2,
+    vestingRoundInterval,
+    fee,
+  } = params;
   let InitalParameterPublicSaleVault = {
-    stosTier1: ethers.BigNumber.from("" + tier[0]),
-    stosTier2: ethers.BigNumber.from("" + tier[1]),
-    stosTier3: ethers.BigNumber.from("" + tier[2]),
-    stosTier4: ethers.BigNumber.from("" + tier[3]),
-    tier1Percents: ethers.BigNumber.from("" + percents[0]),
-    tier2Percents: ethers.BigNumber.from("" + percents[1]),
-    tier3Percents: ethers.BigNumber.from("" + percents[2]),
-    tier4Percents: ethers.BigNumber.from("" + percents[3]),
-    total1roundSaleAmount: ethers.BigNumber.from("" + saleAmount[0]),
-    total2roundSaleAmount: ethers.BigNumber.from("" + saleAmount[1]),
-    saleTokenPrice: ethers.BigNumber.from("" + price[0]),
-    payTokenPrice: ethers.BigNumber.from("" + price[1]),
-    hardcapAmount: ethers.BigNumber.from("" + hardcapAmount),
-    changeTOSPercent: ethers.BigNumber.from("" + changeTOSPercent),
-    startWhiteTime: ethers.BigNumber.from("" + times[0]),
-    endWhiteTime: ethers.BigNumber.from("" + times[1]),
-    start1roundTime: ethers.BigNumber.from("" + times[2]),
-    end1roundTime: ethers.BigNumber.from("" + times[3]),
-    snapshotTime: ethers.BigNumber.from("" + times[4]),
-    start2roundTime: ethers.BigNumber.from("" + times[5]),
-    end2roundTime: ethers.BigNumber.from("" + times[6]),
-    claimCounts: ethers.BigNumber.from("" + claimCounts),
+    stosTier1: formatAmount(tier[0]),
+    stosTier2: formatAmount(tier[1]),
+    stosTier3: formatAmount(tier[2]),
+    stosTier4: formatAmount(tier[3]),
+    tier1Percents: formatAmount(percents[0]),
+    tier2Percents: formatAmount(percents[1]),
+    tier3Percents: formatAmount(percents[2]),
+    tier4Percents: formatAmount(percents[3]),
+    total1roundSaleAmount: formatAmount(saleAmount[0]),
+    total2roundSaleAmount: formatAmount(saleAmount[1]),
+    saleTokenPrice: formatAmount(price[0]),
+    payTokenPrice: formatAmount(price[1]),
+    hardcapAmount: formatAmount(hardcapAmount),
+    changeTOSPercent: formatAmount(changeTOSPercent),
+    startWhiteTime: formatAmount(times[0]),
+    endWhiteTime: formatAmount(times[1]),
+    start1roundTime: formatAmount(times[2]),
+    end1roundTime: formatAmount(times[3]),
+    snapshotTime: formatAmount(times[4]),
+    start2roundTime: formatAmount(times[5]),
+    end2roundTime: formatAmount(times[6]),
   };
 
-  type claimInterface = {
-    claimTimes: Array<BigNumber>;
-    claimPercents: Array<BigNumber>;
+  let InitalParameterPublicSaleClaim = {
+    claimCounts: formatAmount(claimCounts),
+    firstClaimPercent: formatAmount(firstClaimPercent),
+    firstClaimTime: formatAmount(firstClaimTime),
+    secondClaimTime: formatAmount(secondClaimTime),
+    roundInterval: formatAmount(roundInterval),
   };
-
-  let InitalParameterPublicSaleClaim: claimInterface = {
-    claimTimes: [],
-    claimPercents: [],
+  let InitialParameterVestingClaim = {
+    receiveAddress: receiveAddress,
+    totalClaimCount: formatAmount(vestingClaimCounts),
+    firstClaimPercent: formatAmount(vestingfirstClaimPercent),
+    firstClaimTime: formatAmount(vestingClaimTime1),
+    secondClaimTime: formatAmount(vestingClaimTime2),
+    roundIntervalTime: formatAmount(vestingRoundInterval),
+    fee: fee,
   };
-
-  for (let i = 0; i < claimCounts; i++) {
-    InitalParameterPublicSaleClaim.claimTimes.push(
-      ethers.BigNumber.from("" + claimTimes[i])
-    );
-    InitalParameterPublicSaleClaim.claimPercents.push(
-      ethers.BigNumber.from("" + claimPercents[i])
-    );
-  }
 
   return {
     vaultParams: InitalParameterPublicSaleVault,
     claimParams: InitalParameterPublicSaleClaim,
+    vestingParams: InitialParameterVestingClaim,
   };
 };
 
-const getInitialLiquidityParams = (
+export const getInitialLiquidityParams = (
   totalAmount: BigNumber,
   tosPrice: number,
   tokenPrice: number,
@@ -72,15 +104,15 @@ const getInitialLiquidityParams = (
 ) => {
   return {
     totalAllocatedAmount: totalAmount,
-    tosPrice: ethers.BigNumber.from("" + tosPrice),
-    tokenPrice: ethers.BigNumber.from("" + tokenPrice),
+    tosPrice: formatAmount(tosPrice),
+    tokenPrice: formatAmount(tokenPrice),
     initSqrtPrice: ethers.BigNumber.from(price),
     startTime: startTime,
     fee: fee,
   };
 };
 
-const getLpRewardParams = (
+export const getLpRewardParams = (
   claimer: string,
   token0: string,
   token1: string,
@@ -100,9 +132,9 @@ const getLpRewardParams = (
     },
     params: {
       claimer: claimer,
-      totalAllocatedAmount: ethers.BigNumber.from("" + totalAmount),
-      totalClaimCount: ethers.BigNumber.from("" + totalClaimCount),
-      firstClaimAmount: ethers.BigNumber.from("" + firstClaimAmount),
+      totalAllocatedAmount: formatAmount(totalAmount),
+      totalClaimCount: formatAmount(totalClaimCount),
+      firstClaimAmount: formatAmount(firstClaimAmount),
       firstClaimTime: firstClaimTime,
       secondClaimTime: secondClaimTime,
       roundIntervalTime: roundIntervalTime,
@@ -110,7 +142,7 @@ const getLpRewardParams = (
   };
 };
 
-const getTosAirdropParams = (
+export const getTosAirdropParams = (
   claimer: string,
   totalAmount: number,
   totalClaimCount: number,
@@ -121,16 +153,16 @@ const getTosAirdropParams = (
 ) => {
   return {
     claimer: claimer,
-    totalAllocatedAmount: ethers.BigNumber.from("" + totalAmount),
-    totalClaimCount: ethers.BigNumber.from("" + totalClaimCount),
-    firstClaimAmount: ethers.BigNumber.from("" + firstClaimAmount),
+    totalAllocatedAmount: formatAmount(totalAmount),
+    totalClaimCount: formatAmount(totalClaimCount),
+    firstClaimAmount: formatAmount(firstClaimAmount),
     firstClaimTime: firstClaimTime,
     secondClaimTime: secondClaimTime,
     roundIntervalTime: roundIntervalTime,
   };
 };
 
-const getTonAirdropParams = (
+export const getTonAirdropParams = (
   claimer: string,
   totalAmount: number,
   totalClaimCount: number,
@@ -141,16 +173,16 @@ const getTonAirdropParams = (
 ) => {
   return {
     claimer: claimer,
-    totalAllocatedAmount: ethers.BigNumber.from("" + totalAmount),
-    totalClaimCount: ethers.BigNumber.from("" + totalClaimCount),
-    firstClaimAmount: ethers.BigNumber.from("" + firstClaimAmount),
+    totalAllocatedAmount: formatAmount(totalAmount),
+    totalClaimCount: formatAmount(totalClaimCount),
+    firstClaimAmount: formatAmount(firstClaimAmount),
     firstClaimTime: firstClaimTime,
     secondClaimTime: secondClaimTime,
     roundIntervalTime: roundIntervalTime,
   };
 };
 
-const getScheduleParams = (
+export const getScheduleParams = (
   name: string,
   claimer: string,
   totalAmount: BigNumber,
@@ -165,7 +197,7 @@ const getScheduleParams = (
     params: {
       claimer: claimer,
       totalAllocatedAmount: totalAmount,
-      totalClaimCount: ethers.BigNumber.from("" + totalClaimCount),
+      totalClaimCount: formatAmount(totalClaimCount),
       firstClaimAmount: firstClaimAmount,
       firstClaimTime: firstClaimTime,
       secondClaimTime: secondClaimTime,
@@ -174,7 +206,7 @@ const getScheduleParams = (
   };
 };
 
-const getNonScheduleParams = (
+export const getNonScheduleParams = (
   name: string,
   claimer: string,
   totalAmount: BigNumber
@@ -184,14 +216,4 @@ const getNonScheduleParams = (
     claimer: claimer,
     totalAllocatedAmount: totalAmount,
   };
-};
-
-export default {
-  getPublicSaleParams,
-  getInitialLiquidityParams,
-  getLpRewardParams,
-  getTosAirdropParams,
-  getTonAirdropParams,
-  getScheduleParams,
-  getNonScheduleParams,
 };

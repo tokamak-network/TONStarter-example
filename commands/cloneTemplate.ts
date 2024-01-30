@@ -60,6 +60,8 @@ REACT_APP_TITAN_PROVIDER=https://rpc.titan-goerli.tokamak.network
         fs.writeFileSync(".env", envVariables, "utf-8");
         console.log(".env file created successfully.");
 
+        fs.writeFileSync(".env", envVariables, "utf-8");
+        console.log(".env file created successfully.");
         // execSync("npm start");
         console.log("Running npm start...");
         const npmStart = spawn("npm", ["start", "--verbose"], {
@@ -78,3 +80,5 @@ REACT_APP_TITAN_PROVIDER=https://rpc.titan-goerli.tokamak.network
     });
   }, 1000);
 };
+
+cloneTemplate();

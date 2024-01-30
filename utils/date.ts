@@ -54,6 +54,6 @@ export const getLocalTimeZone = () => {
   return offsetString;
 };
 
-export const convertToTimestamp = (date: string) => {
-  return Date.parse(date) / 1000;
+export const convertToTimestamp = (date: string | Date) => {
+  return Date.parse(date.toString()) / 1000;
 };

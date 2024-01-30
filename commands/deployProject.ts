@@ -10,7 +10,48 @@ import {
 import { animateEllipsis } from "../utils/consoleUI";
 import createProjectL1 from "../contracts/deploy/0.create_project_L1";
 import setTokenOnL2 from "../contracts/deploy/1.set_token_L2";
+import setUpVaults from "../contracts/deploy/2.set_vaults_L2";
 
+export class SetUpVaults implements I_StepListener {
+  private createProjectStatus: CreateProject;
+
+  constructor(createProjectStatus: CreateProject) {
+    this.createProjectStatus = createProjectStatus;
+  }
+  getParmas(): Params {
+    const cliAnswers = this.createProjectStatus.cliAnswers;
+    return cliAnswers;
+  }
+
+  updateStep(step: DeployContractStep) {
+    this.createProjectStatus.setStep = step;
+  }
+
+  async deployProject(step: DeployContractStep): Promise<DeployProject> {
+    try {
+      if (step !== "SetUpVaults") return { state: false };
+      const deployedProject = await animateEllipsis(
+        "Setting your vaults on L2...",
+        () =>
+          setUpVaults(this.createProjectStatus.projectInfo, this.getParmas()),
+        400
+      );
+
+      if (deployedProject.state) {
+        this.updateStep("Done");
+        return deployedProject;
+      }
+      this.updateStep("Error");
+      throw new DeploymentError("Deployment failed");
+    } catch (error) {
+      if (error instanceof DeploymentError) {
+        return error;
+      } else {
+        throw error; // Re-throw other errors
+      }
+    }
+  }
+}
 export class SetTokenOnL2 implements I_StepListener {
   private createProjectStatus: CreateProject;
 
@@ -36,7 +77,7 @@ export class SetTokenOnL2 implements I_StepListener {
       );
 
       if (deployedProject.state) {
-        this.updateStep("Done");
+        this.updateStep("SetUpVaults");
         return deployedProject;
       }
       this.updateStep("Error");

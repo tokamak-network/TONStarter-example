@@ -17,9 +17,13 @@ export const createCliAnswers = async (
   const initialResponse = await inquirer.prompt(firstQuestions);
   const followUpQuestionForTokenAllocation =
     getSecondQuestions(initialResponse);
-  const secondResponse = await inquirer.prompt(
-    followUpQuestionForTokenAllocation
-  );
+  const secondResponse = await inquirer
+    .prompt(followUpQuestionForTokenAllocation)
+    .then((answer) => {
+      return { ...initialResponse, ...answer };
+    });
+
+  console.log("secondResponse", secondResponse);
 
   const cliAnswersForFinalRound: CLI_Answer = {
     ...initialResponse,
@@ -33,9 +37,11 @@ export const createCliAnswers = async (
       secondResponse
     ),
   };
-  const answersForScheduling = await inquirer.prompt(
-    getScheduling(cliAnswersForFinalRound)
-  );
+  const answersForScheduling = await inquirer
+    .prompt(getScheduling(cliAnswersForFinalRound))
+    .then((answer) => {
+      return { ...secondResponse, ...answer };
+    });
   const scheduledVaults = setUpClaim(
     answersForScheduling.schedule.result,
     cliAnswersForFinalRound.vaults

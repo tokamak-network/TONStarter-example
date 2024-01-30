@@ -7,6 +7,7 @@ import {
   CreateProject,
   DeployProjectOnL1,
   SetTokenOnL2,
+  SetUpVaults,
 } from "./deployProject";
 import { createCliAnswers } from "./createCliAnswers";
 import { cloneTemplate } from "./cloneTemplate.js";
@@ -65,12 +66,15 @@ async function init() {
     const CLI = new CreateProject(cliAnswers);
     const deployOnL1 = new DeployProjectOnL1(CLI);
     const setTokenOnL2 = new SetTokenOnL2(CLI);
+    const setUpVaults = new SetUpVaults(CLI);
 
-    CLI.addStepChangeListener([deployOnL1, setTokenOnL2]);
+    CLI.addStepChangeListener([deployOnL1, setTokenOnL2, setUpVaults]);
     const deployed = await CLI.start();
 
+    console.log("deployed", deployed);
+
     if (deployed && CLI.projectInfo) {
-      return cloneTemplate(CLI.projectInfo);
+      // return cloneTemplate(CLI.projectInfo);
       // return console.log(
       //   "🚀All process is done. You just need to wait for depositing your tokens."
       // );

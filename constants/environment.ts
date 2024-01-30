@@ -14,7 +14,6 @@ export const getWallet = () => {
 
 export const getL1Provider = async () => {
   const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1Url);
-
   return l1RpcProvider;
 };
 
