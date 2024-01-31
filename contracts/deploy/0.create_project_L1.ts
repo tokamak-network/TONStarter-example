@@ -9,6 +9,7 @@ import { CLI_Answer, Deployed } from "../../types";
 import { addressManager } from "../../constants/common_func";
 import { DeployedProjectInfo } from "../../types";
 import { ZERO_ADDRESS, walletSetup } from "../../constants";
+import { MultiChainSDK } from "tokamak-multichain";
 
 /**
  * @typedef {Object} CLI_Answer
@@ -43,18 +44,22 @@ async function main(answers: CLI_Answer) {
     l1Token: undefined,
     l2Token: undefined,
   };
-  const GOERLI_CONTRACTS = {
-    L1ProjectManagerProxy: "0x3eD0776A8E323a294cd704c02a349ca1B83554da",
-  };
+
   const { l1Signer } = await walletSetup();
 
   if (!l1Signer) return;
 
-  const L1ProjectManager = new Contract(
-    GOERLI_CONTRACTS.L1ProjectManagerProxy,
-    L1ProjectManagerJson.abi,
-    l1Signer
-  );
+  const EthereumSDK = new MultiChainSDK({
+    chainId: 5,
+    signerOrProvider: l1Signer,
+  });
+  const L1ProjectManager = EthereumSDK.getContract("L1ProjectManagerProxy");
+
+  // const L1ProjectManager = new Contract(
+  //   "0x76B2435ED9A20f618a11616A3C8f57E592393826",
+  //   L1ProjectManagerJson.abi,
+  //   l1Signer
+  // );
 
   // create project on L1
   const receipt = await (
@@ -112,6 +117,7 @@ async function createProjectL1(answers: CLI_Answer): Promise<Deployed> {
     const result = await main(answers);
     return { state: true, result };
   } catch (e) {
+    console.log(e);
     return { state: false, result: undefined };
   }
 }

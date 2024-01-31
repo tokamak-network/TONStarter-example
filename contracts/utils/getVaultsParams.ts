@@ -51,16 +51,16 @@ export const getPublicSaleParams = (params: {
     stosTier2: formatAmount(tier[1]),
     stosTier3: formatAmount(tier[2]),
     stosTier4: formatAmount(tier[3]),
-    tier1Percents: formatAmount(percents[0]),
-    tier2Percents: formatAmount(percents[1]),
-    tier3Percents: formatAmount(percents[2]),
-    tier4Percents: formatAmount(percents[3]),
+    tier1Percents: percents[0],
+    tier2Percents: percents[1],
+    tier3Percents: percents[2],
+    tier4Percents: percents[3],
     total1roundSaleAmount: formatAmount(saleAmount[0]),
     total2roundSaleAmount: formatAmount(saleAmount[1]),
     saleTokenPrice: formatAmount(price[0]),
     payTokenPrice: formatAmount(price[1]),
     hardcapAmount: formatAmount(hardcapAmount),
-    changeTOSPercent: formatAmount(changeTOSPercent),
+    changeTOSPercent,
     startWhiteTime: formatAmount(times[0]),
     endWhiteTime: formatAmount(times[1]),
     start1roundTime: formatAmount(times[2]),
@@ -95,7 +95,7 @@ export const getPublicSaleParams = (params: {
 };
 
 export const getInitialLiquidityParams = (
-  totalAmount: BigNumber,
+  totalAmount: number,
   tosPrice: number,
   tokenPrice: number,
   price: string,
@@ -103,7 +103,7 @@ export const getInitialLiquidityParams = (
   fee: number
 ) => {
   return {
-    totalAllocatedAmount: totalAmount,
+    totalAllocatedAmount: formatAmount(totalAmount),
     tosPrice: formatAmount(tosPrice),
     tokenPrice: formatAmount(tokenPrice),
     initSqrtPrice: ethers.BigNumber.from(price),
