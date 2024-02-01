@@ -1,4 +1,7 @@
 import { ethers, BigNumber } from "ethers";
+import { CLI_Answer, Vaults } from "../../types";
+import { integerDivision } from "./number";
+import { convertToTimestamp, getRoundInterval } from "../../utils/date";
 
 const formatAmount = (amount: number) => {
   return ethers.utils.parseUnits(String(amount), 18);
@@ -215,5 +218,121 @@ export const getNonScheduleParams = (
     vaultName: name,
     claimer: claimer,
     totalAllocatedAmount: totalAmount,
+  };
+};
+
+export const getVaultTokenAllocation = (answers: CLI_Answer) => {
+  const saleAmount = answers.vaults.Public.tokenAllocation;
+  const initialLiquidityAmount = answers.vaults.Liquidity.tokenAllocation;
+
+  const ecosystemAmount = integerDivision(
+    answers.vaults.Ecosystem.tokenAllocation,
+    1
+  );
+
+  const rewardProjectTosPoolAmount =
+    ecosystemAmount.allocation + ecosystemAmount.remainder;
+
+  //TON Staker, TOS Staker, TON-TOS LP
+  const tonstarterAmount = integerDivision(
+    answers.vaults.TONStarter.tokenAllocation,
+    3
+  );
+
+  const rewardTonTosPoolAmount =
+    tonstarterAmount.allocation + tonstarterAmount.remainder;
+  const airdropStosAmount = tonstarterAmount.allocation;
+  const airdropTonAmount = tonstarterAmount.allocation;
+
+  return {
+    saleAmount,
+    initialLiquidityAmount,
+    rewardProjectTosPoolAmount,
+    rewardTonTosPoolAmount,
+    airdropStosAmount,
+    airdropTonAmount,
+  };
+};
+
+export const getSaleSchedule = (answers: CLI_Answer) => {
+  const snapshotTime = convertToTimestamp(answers.snapshot);
+  const whitelistStartTime = convertToTimestamp(answers.whitelistStart);
+  const whitelistEndTime = convertToTimestamp(answers.whitelistEnd);
+  const round1StartTime = convertToTimestamp(answers.round1Start);
+  const round1EndTime = convertToTimestamp(answers.round1End);
+  const round2StartTime = convertToTimestamp(answers.round2Start);
+  const round2EndTime = convertToTimestamp(answers.round2End);
+  const claimStartTime = convertToTimestamp(answers.claimStart);
+
+  return {
+    snapshotTime,
+    whitelistStartTime,
+    whitelistEndTime,
+    round1StartTime,
+    round1EndTime,
+    round2StartTime,
+    round2EndTime,
+    claimStartTime,
+  };
+};
+
+export const getParamsAfterSale = (params: {
+  answers: CLI_Answer;
+  claimStartTime: number;
+}) => {
+  const { answers, claimStartTime } = params;
+  const firstClaimTime = claimStartTime;
+  const totalClaimCount = Number(answers.totalRoundChoice);
+  const roundIntervalTime = getRoundInterval(
+    Number(answers.roundInterval),
+    answers.roundIntervalUnit
+  );
+  const secondClaimTime = firstClaimTime + roundIntervalTime;
+  const firstVesingClaimTime = secondClaimTime;
+  const secondVesingClaimTime = firstVesingClaimTime + roundIntervalTime;
+  const changeTOS = 10;
+  //only for SaleVault
+  const firstClaimPercent = 3333;
+  const fee = 3000;
+
+  return {
+    firstClaimTime,
+    secondClaimTime,
+    totalClaimCount,
+    roundIntervalTime,
+    firstVesingClaimTime,
+    secondVesingClaimTime,
+    changeTOS,
+    firstClaimPercent,
+    fee,
+  };
+};
+
+export const getFirstClaimAmount = (
+  vaults: Vaults,
+  vaultType: keyof Vaults
+) => {
+  const selectedVault = vaults[vaultType];
+  if (selectedVault.claimSchedule)
+    return selectedVault.claimSchedule[0].tokenAllocation;
+  throw new Error(`${vaultType}'s claimSechdule is undefined`);
+};
+
+export const getFirstClaimAmountForAllVaults = (
+  vaults: Vaults
+): {
+  [K in keyof Vaults]: number;
+} => {
+  const fcAmount_InitialLiquidity = getFirstClaimAmount(vaults, "Liquidity");
+  const fcAmount_Ecosystem = getFirstClaimAmount(vaults, "Ecosystem");
+  const fcAmount_Team = getFirstClaimAmount(vaults, "Team");
+  const fcAmount_Tonstarter = getFirstClaimAmount(vaults, "TONStarter");
+
+  return {
+    Public: 0,
+    Liquidity: fcAmount_InitialLiquidity,
+    Ecosystem: fcAmount_Ecosystem,
+    Team: fcAmount_Team,
+    TONStarter: fcAmount_Tonstarter,
   };
 };

@@ -27,6 +27,10 @@ export type CLI_Answer = {
   tokenSymbol: string;
   initialTotalSupply: string;
   adminAddress: string;
+  recevingAddress: string;
+  snapshot: Date;
+  whitelistStart: Date;
+  whitelistEnd: Date;
   round1Start: Date;
   round1End: Date;
   round2Start: Date;

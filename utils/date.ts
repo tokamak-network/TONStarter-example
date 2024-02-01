@@ -57,3 +57,13 @@ export const getLocalTimeZone = () => {
 export const convertToTimestamp = (date: string | Date) => {
   return Date.parse(date.toString()) / 1000;
 };
+
+export const getRoundInterval = (
+  addedTime: number,
+  unit: "Monthly" | "Weekly"
+): number => {
+  const roundInterval =
+    unit === "Monthly" ? addedTime * 2629743 : addedTime * 604800;
+
+  return roundInterval;
+};

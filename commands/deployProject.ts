@@ -31,7 +31,7 @@ export class SetUpVaults implements I_StepListener {
     try {
       if (step !== "SetUpVaults") return { state: false };
       const deployedProject = await animateEllipsis(
-        "Setting your vaults on L2...",
+        "Setting your vaults on L1...",
         () =>
           setUpVaults(this.createProjectStatus.projectInfo, this.getParmas()),
         400

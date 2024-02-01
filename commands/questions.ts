@@ -74,6 +74,21 @@ export const firstQuestions = [
   },
   {
     type: "date",
+    name: "snapshot",
+    message: "When do you like to start Round 1 (for STOS holders)?",
+  },
+  {
+    type: "date",
+    name: "round1Start",
+    message: "When do you like to start Round 1 (for STOS holders)?",
+  },
+  {
+    type: "date",
+    name: "round1Start",
+    message: "When do you like to start Round 1 (for STOS holders)?",
+  },
+  {
+    type: "date",
     name: "round1Start",
     message: "When do you like to start Round 1 (for STOS holders)?",
   },

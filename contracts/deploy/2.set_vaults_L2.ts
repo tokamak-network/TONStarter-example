@@ -13,21 +13,32 @@ import {
   getTonAirdropParams,
   getScheduleParams,
   getNonScheduleParams,
+  getVaultTokenAllocation,
+  getSaleSchedule,
+  getParamsAfterSale,
+  getFirstClaimAmount,
+  getFirstClaimAmountForAllVaults,
 } from "../utils/getVaultsParams";
 import { getBlockExplorerWithHash } from "../utils/blockExplorerMsg";
 import { DeployedProjectInfo } from "../../types/deploy";
 import { CLI_Answer } from "../../types/command";
 import { MultiChainSDK } from "tokamak-multichain";
-import { convertToTimestamp } from "../../utils/date";
+import { convertToTimestamp, getRoundInterval } from "../../utils/date";
 import { walletSetup } from "../../constants";
+import { integerDivision } from "../utils/number";
 
 // Global variable because we need them almost everywhere
 
 // const GOERLI_CONTRACTS
 
-const L2TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC";
-const L2TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa";
-
+/**
+   * @description Total 10 Vaults we need to setup here
+   * Sale : PublicSale, Vesting
+     Liquidity : Initial Liquidity, 
+     Ecocysystem : ProjectToken-TOS LP Reward
+     Team : Team
+     TONStarter : TON-TOS, TON-Staker, TOS-Staker
+  */
 async function main(
   projectInfo: DeployedProjectInfo,
   answers: CLI_Answer
@@ -42,55 +53,67 @@ async function main(
     signerOrProvider: l1Signer,
   });
   const L1ProjectManager = EthereumSDK.getContract("L1ProjectManagerProxy");
+  const TitanSDK = new MultiChainSDK({
+    chainId: 5050,
+  });
+  const L2TOS = TitanSDK.getToken("TOS").address;
+  const L2TON = TitanSDK.getToken("TON").address;
 
-  // const L1ProjectManager = new Contract(
-  //   "0x76B2435ED9A20f618a11616A3C8f57E592393826",
-  //   L1ProjectManagerJson.abi,
-  //   l1Signer
-  // );
+  // const L2TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC";
+  // const L2TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa";
 
-  /**
-   * @description Total 10 Vaults we need to setup here
-   * Sale : PublicSale
-     Liquidity : Initial Liquidity, 
-     Ecocysystem : ProjectToken-TOS LP Reward
-     Team : Vesting
-     TONStarter : TON-TOS, TON-Staker, TOS-Staker
-  */
+  const {
+    saleAmount,
+    initialLiquidityAmount,
+    rewardTonTosPoolAmount,
+    rewardProjectTosPoolAmount,
+    airdropStosAmount,
+    airdropTonAmount,
+  } = getVaultTokenAllocation(answers);
 
-  // const saleAmount = answers.vaults.Public.tokenAllocation;
-  // const initialLiquidityAmount = answers.vaults.Liquidity.tokenAllocation;
-  // const rewardTonTosPoolAmount = answers.vaults.Public.tokenAllocation;
-  // const rewardProjectTosPoolAmount = answers.vaults.Ecosystem.tokenAllocation;
-  // const airdropStosAmount = answers.vaults.TONStarter.tokenAllocation / 2;
-  // const airdropTonAmount = answers.vaults.TONStarter.tokenAllocation / 2;
+  // const saleAmount = 50000;
+  // const initialLiquidityAmount = 10000;
+  // const rewardTonTosPoolAmount = 10000;
+  // const rewardProjectTosPoolAmount = 10000;
+  // const airdropStosAmount = 10000;
+  // const airdropTonAmount = 10000;
 
-  const saleAmount = 50000;
-  const initialLiquidityAmount = 10000;
-  const rewardTonTosPoolAmount = 10000;
-  const rewardProjectTosPoolAmount = 10000;
-  const airdropStosAmount = 10000;
-  const airdropTonAmount = 10000;
+  console.log("*****gogo*****");
 
-  const snapshotTime = convertToTimestamp(answers.round1Start) - 600;
-  const whitelistStartTime = convertToTimestamp(answers.round1Start) - 500;
-  const whitelistEndTime = convertToTimestamp(answers.round1Start) - 400;
-  const round1StartTime = convertToTimestamp(answers.round1Start);
-  const round1EndTime = convertToTimestamp(answers.round1End);
-  const round2StartTime = convertToTimestamp(answers.round2Start);
-  const round2EndTime = convertToTimestamp(answers.round2End);
-  const claimStartTime = convertToTimestamp(answers.claimStart);
+  console.log(
+    saleAmount,
+    initialLiquidityAmount,
+    rewardTonTosPoolAmount,
+    rewardProjectTosPoolAmount,
+    airdropStosAmount,
+    airdropTonAmount
+  );
 
-  const firstClaimTime = claimStartTime;
-  const totalClaimCount = Number(answers.totalRoundChoice);
-  const roundIntervalTime = 60 * 60 * 24 * 7;
-  const secondClaimTime = firstClaimTime + roundIntervalTime;
-  const fundClaimTime1 = secondClaimTime + 3000;
-  const fundClaimTime2 = fundClaimTime1 + 100;
-  const changeTOS = 10;
-  const firstClaimPercent = 4000;
-  const roundInterval = 600; //1분
-  const fee = 3000;
+  const {
+    snapshotTime,
+    whitelistStartTime,
+    whitelistEndTime,
+    round1StartTime,
+    round1EndTime,
+    round2StartTime,
+    round2EndTime,
+    claimStartTime,
+  } = getSaleSchedule(answers);
+
+  const {
+    firstClaimTime,
+    secondClaimTime,
+    totalClaimCount,
+    roundIntervalTime,
+    firstVesingClaimTime,
+    secondVesingClaimTime,
+    changeTOS,
+    firstClaimPercent,
+    fee,
+  } = getParamsAfterSale({
+    answers,
+    claimStartTime,
+  });
 
   const publicSaleParams = getPublicSaleParams({
     tier: [100, 200, 1000, 4000], //tier,
@@ -109,15 +132,15 @@ async function main(
       round2EndTime,
     ],
     claimCounts: totalClaimCount,
-    firstClaimPercent: 3300,
+    firstClaimPercent,
     firstClaimTime: claimStartTime,
     secondClaimTime: secondClaimTime,
     roundInterval: roundIntervalTime,
-    receiveAddress: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
+    receiveAddress: answers.recevingAddress,
     vestingClaimCounts: totalClaimCount,
-    vestingfirstClaimPercent: 3300,
-    vestingClaimTime1: fundClaimTime1,
-    vestingClaimTime2: fundClaimTime2,
+    vestingfirstClaimPercent: firstClaimPercent,
+    vestingClaimTime1: firstVesingClaimTime,
+    vestingClaimTime2: secondVesingClaimTime,
     vestingRoundInterval: roundIntervalTime,
     fee,
   });
@@ -125,11 +148,22 @@ async function main(
   const check = await L1ProjectManager.validationPublicSaleVaults(
     publicSaleParams
   );
+  if (check.valid === false) {
+    throw Error("publicSaleVault's valid is failed");
+  }
   console.log("**publicSaleParams**");
   console.log(check);
 
-  let tosPrice = 1e18;
-  let tokenPrice = 10e18;
+  /**
+   * Common Props for vaults except for Sale
+   */
+  const firstClaimAmount = getFirstClaimAmountForAllVaults(answers.vaults);
+
+  /**
+   * Liquidity
+   */
+  const tosPrice = 1;
+  const tokenPrice = Number(answers.tokenPrice);
 
   let token0Price = tosPrice;
   let token1Price = tokenPrice;
@@ -151,27 +185,10 @@ async function main(
     fee
   );
 
-  const initialLiquidityFirstClaimAmount = answers.vaults.Liquidity
-    .claimSchedule
-    ? answers.vaults.Liquidity.claimSchedule[0].tokenAllocation
-    : 1;
-
-  const rewardTonTosPoolParams = getLpRewardParams(
-    ethers.constants.AddressZero,
-    L2TON,
-    L2TOS,
-    fee,
-    rewardTonTosPoolAmount,
-    totalClaimCount,
-    initialLiquidityFirstClaimAmount, //firstClaimAmount
-    firstClaimTime, //firstClaimTime
-    secondClaimTime, //secondClaimTime
-    roundIntervalTime //roundIntervalTime
-  );
-
-  const rewardProjectFirstClaimAmount = answers.vaults.Ecosystem.claimSchedule
-    ? answers.vaults.Ecosystem.claimSchedule[0].tokenAllocation
-    : 1;
+  /**
+   * Ecosystem
+   */
+  const rewardProject_fcAmount = firstClaimAmount.Ecosystem;
 
   const rewardProjectTosPoolParams = getLpRewardParams(
     ethers.constants.AddressZero,
@@ -180,35 +197,49 @@ async function main(
     fee,
     rewardProjectTosPoolAmount,
     totalClaimCount,
-    rewardProjectFirstClaimAmount, //firstClaimAmount
+    rewardProject_fcAmount, //firstClaimAmount
     firstClaimTime, //firstClaimTime
     secondClaimTime, //secondClaimTime
     roundIntervalTime //roundIntervalTime
   );
 
-  const tosStakerFirstClaimAmount = answers.vaults.TONStarter.claimSchedule
-    ? answers.vaults.TONStarter.claimSchedule[0].tokenAllocation / 2
-    : 1;
+  /**
+   * TONStarter
+   */
+  const tonstarter_fcAmount = integerDivision(firstClaimAmount.TONStarter, 3);
+  const tontos_fcAmount =
+    tonstarter_fcAmount.allocation + tonstarter_fcAmount.remainder;
+  const tosStaker_fcAmount = tonstarter_fcAmount.allocation;
+  const tonStaker_fcAmount = tonstarter_fcAmount.allocation;
+
+  const rewardTonTosPoolParams = getLpRewardParams(
+    ethers.constants.AddressZero,
+    L2TON,
+    L2TOS,
+    fee,
+    rewardTonTosPoolAmount,
+    totalClaimCount,
+    tontos_fcAmount, //firstClaimAmount
+    firstClaimTime, //firtClaimTime
+    secondClaimTime, //secondClaimTime
+    roundIntervalTime //roundIntervalTime
+  );
 
   const tosAirdropParams = getTosAirdropParams(
     ethers.constants.AddressZero,
     airdropStosAmount,
     totalClaimCount,
-    tosStakerFirstClaimAmount,
+    tosStaker_fcAmount,
     firstClaimTime,
     secondClaimTime,
     roundIntervalTime
   );
 
-  const tonStakerFirstClaimAmount = answers.vaults.TONStarter.claimSchedule
-    ? answers.vaults.TONStarter.claimSchedule[0].tokenAllocation / 2
-    : 1;
-
   const tonAirdropParams = getTonAirdropParams(
     ethers.constants.AddressZero,
     airdropTonAmount,
     totalClaimCount,
-    tonStakerFirstClaimAmount,
+    tonStaker_fcAmount,
     firstClaimTime,
     secondClaimTime,
     roundIntervalTime
@@ -230,27 +261,6 @@ async function main(
     projectInfo.initialTotalSupply,
     tokamakVaults
   );
-
-  // const validationVaultsParameters =
-  //   await L1ProjectManager.validationVaultsParameters(
-  //     projectInfo.initialTotalSupply,
-  //     tokamakVaults,
-  //     [],
-  //     []
-  //   );
-  // const publicVaultcheck = await L1ProjectManager.validationPublicSaleVaults(
-  //   publicSaleParams
-  // );
-  // if (publicVaultcheck.valid == false) {
-  //   console.log(publicVaultcheck);
-  //   console.log("publicVaultcheck.valid === false");
-  //   return;
-  // }
-  // if (validationVaultsParameters.valid === false) {
-  //   console.log(validationVaultsParameters);
-  //   console.log("validationVaultsParameters.valid === false");
-  //   return;
-  // }
 
   const receipt = await (
     await L1ProjectManager.launchProjectExceptCheckPublic(
