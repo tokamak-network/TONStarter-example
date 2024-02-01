@@ -19,7 +19,7 @@ function validateNumberValue(value: any) {
   );
 }
 
-export const firstQuestions = [
+export const validateAccount = [
   {
     type: "confirm",
     name: "adminAddress",
@@ -28,6 +28,17 @@ export const firstQuestions = [
     )})`,
     validate: (value: string) => ethers.utils.isAddress(value),
   },
+  {
+    type: "confirm",
+    name: "recevingAddress",
+    message: `Are you certain about using this account as the address to receive fundraising TON? (${chalk.redBright(
+      wallet?.address as string
+    )})`,
+    validate: (value: string) => ethers.utils.isAddress(value),
+  },
+];
+
+export const firstQuestions = [
   {
     type: "input",
     name: "projectName",
@@ -75,17 +86,17 @@ export const firstQuestions = [
   {
     type: "date",
     name: "snapshot",
-    message: "When do you like to start Round 1 (for STOS holders)?",
+    message: "When do you like to start Snpashot (for STOS holders)?",
   },
   {
     type: "date",
-    name: "round1Start",
-    message: "When do you like to start Round 1 (for STOS holders)?",
+    name: "whitelistStart",
+    message: "When do you like to start whitelist (for STOS holders)?",
   },
   {
     type: "date",
-    name: "round1Start",
-    message: "When do you like to start Round 1 (for STOS holders)?",
+    name: "whitelistEnd",
+    message: "When do you like to end whitelist (for STOS holders)?",
   },
   {
     type: "date",

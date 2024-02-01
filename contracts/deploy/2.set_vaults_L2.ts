@@ -43,24 +43,20 @@ async function main(
   projectInfo: DeployedProjectInfo,
   answers: CLI_Answer
 ): Promise<DeployedProjectInfo> {
-  console.log("project", projectInfo);
-  console.log("answers", answers);
-  // return project;
-
   const { l1Signer } = await walletSetup();
   const EthereumSDK = new MultiChainSDK({
     chainId: 5,
     signerOrProvider: l1Signer,
   });
   const L1ProjectManager = EthereumSDK.getContract("L1ProjectManagerProxy");
-  const TitanSDK = new MultiChainSDK({
-    chainId: 5050,
-  });
-  const L2TOS = TitanSDK.getToken("TOS").address;
-  const L2TON = TitanSDK.getToken("TON").address;
+  // const TitanSDK = new MultiChainSDK({
+  //   chainId: 5050,
+  // });
+  // const L2TOS = TitanSDK.getToken("TOS").address;
+  // const L2TON = TitanSDK.getToken("TON").address;
 
-  // const L2TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC";
-  // const L2TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa";
+  const L2TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC";
+  const L2TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa";
 
   const {
     saleAmount,
@@ -69,25 +65,8 @@ async function main(
     rewardProjectTosPoolAmount,
     airdropStosAmount,
     airdropTonAmount,
+    teamAmount,
   } = getVaultTokenAllocation(answers);
-
-  // const saleAmount = 50000;
-  // const initialLiquidityAmount = 10000;
-  // const rewardTonTosPoolAmount = 10000;
-  // const rewardProjectTosPoolAmount = 10000;
-  // const airdropStosAmount = 10000;
-  // const airdropTonAmount = 10000;
-
-  console.log("*****gogo*****");
-
-  console.log(
-    saleAmount,
-    initialLiquidityAmount,
-    rewardTonTosPoolAmount,
-    rewardProjectTosPoolAmount,
-    airdropStosAmount,
-    airdropTonAmount
-  );
 
   const {
     snapshotTime,
@@ -115,10 +94,14 @@ async function main(
     claimStartTime,
   });
 
+  const publicSaleAmount = integerDivision(saleAmount, 2);
+  const round1Amount = publicSaleAmount.allocation;
+  const round2Amount = publicSaleAmount.allocation + publicSaleAmount.remainder;
+
   const publicSaleParams = getPublicSaleParams({
     tier: [100, 200, 1000, 4000], //tier,
     percents: [2500, 2500, 2500, 2500], // percentage,
-    saleAmount: [Number(saleAmount) / 2, saleAmount / 2],
+    saleAmount: [round1Amount, round2Amount],
     price: [200, 2000],
     hardcapAmount: 100 * 1e18,
     changeTOSPercent: changeTOS,
@@ -149,10 +132,9 @@ async function main(
     publicSaleParams
   );
   if (check.valid === false) {
+    console.log(publicSaleParams);
     throw Error("publicSaleVault's valid is failed");
   }
-  console.log("**publicSaleParams**");
-  console.log(check);
 
   /**
    * Common Props for vaults except for Sale
@@ -178,8 +160,8 @@ async function main(
   );
   const initialVaultParams = getInitialLiquidityParams(
     initialLiquidityAmount,
-    tosPrice / 1e18,
-    token1Price / 1e18,
+    tosPrice,
+    token1Price,
     sqrtPrice.toString(),
     claimStartTime,
     fee
@@ -198,6 +180,21 @@ async function main(
     rewardProjectTosPoolAmount,
     totalClaimCount,
     rewardProject_fcAmount, //firstClaimAmount
+    firstClaimTime, //firstClaimTime
+    secondClaimTime, //secondClaimTime
+    roundIntervalTime //roundIntervalTime
+  );
+
+  /**
+   * Team
+   */
+  const team_fcAmount = firstClaimAmount.Team;
+  const teamVault = getScheduleParams(
+    "TEAM",
+    answers.recevingAddress,
+    teamAmount, //totalAllocatedAmount
+    totalClaimCount, // totalClaimCount
+    team_fcAmount, //firstClaimAmount
     firstClaimTime, //firstClaimTime
     secondClaimTime, //secondClaimTime
     roundIntervalTime //roundIntervalTime
@@ -254,13 +251,7 @@ async function main(
     tonAirdropParams,
   };
 
-  console.log("params*****");
-  console.log(
-    projectInfo.projectId,
-    projectInfo.l2Token,
-    projectInfo.initialTotalSupply,
-    tokamakVaults
-  );
+  const customScheduleVaults = [teamVault];
 
   const receipt = await (
     await L1ProjectManager.launchProjectExceptCheckPublic(
@@ -268,7 +259,7 @@ async function main(
       projectInfo.l2Token,
       projectInfo.initialTotalSupply,
       tokamakVaults,
-      [],
+      customScheduleVaults,
       []
     )
   ).wait();

@@ -81,7 +81,7 @@ export const getPublicSaleParams = (params: {
     roundInterval: formatAmount(roundInterval),
   };
   let InitialParameterVestingClaim = {
-    receiveAddress: receiveAddress,
+    receiveAddress,
     totalClaimCount: formatAmount(vestingClaimCounts),
     firstClaimPercent: formatAmount(vestingfirstClaimPercent),
     firstClaimTime: formatAmount(vestingClaimTime1),
@@ -188,9 +188,9 @@ export const getTonAirdropParams = (
 export const getScheduleParams = (
   name: string,
   claimer: string,
-  totalAmount: BigNumber,
+  totalAmount: number,
   totalClaimCount: number,
-  firstClaimAmount: BigNumber,
+  firstClaimAmount: number,
   firstClaimTime: number,
   secondClaimTime: number,
   roundIntervalTime: number
@@ -199,9 +199,9 @@ export const getScheduleParams = (
     vaultName: name,
     params: {
       claimer: claimer,
-      totalAllocatedAmount: totalAmount,
+      totalAllocatedAmount: formatAmount(totalAmount),
       totalClaimCount: formatAmount(totalClaimCount),
-      firstClaimAmount: firstClaimAmount,
+      firstClaimAmount: formatAmount(firstClaimAmount),
       firstClaimTime: firstClaimTime,
       secondClaimTime: secondClaimTime,
       roundIntervalTime: roundIntervalTime,
@@ -233,6 +233,8 @@ export const getVaultTokenAllocation = (answers: CLI_Answer) => {
   const rewardProjectTosPoolAmount =
     ecosystemAmount.allocation + ecosystemAmount.remainder;
 
+  const teamAmount = integerDivision(answers.vaults.Team.tokenAllocation, 1);
+
   //TON Staker, TOS Staker, TON-TOS LP
   const tonstarterAmount = integerDivision(
     answers.vaults.TONStarter.tokenAllocation,
@@ -248,6 +250,7 @@ export const getVaultTokenAllocation = (answers: CLI_Answer) => {
     saleAmount,
     initialLiquidityAmount,
     rewardProjectTosPoolAmount,
+    teamAmount: teamAmount.allocation,
     rewardTonTosPoolAmount,
     airdropStosAmount,
     airdropTonAmount,
@@ -281,10 +284,13 @@ export const getParamsAfterSale = (params: {
   claimStartTime: number;
 }) => {
   const { answers, claimStartTime } = params;
+  const roundNum = Number(
+    answers.roundInterval.replace("Month", "").replace("Week", "")
+  );
   const firstClaimTime = claimStartTime;
   const totalClaimCount = Number(answers.totalRoundChoice);
   const roundIntervalTime = getRoundInterval(
-    Number(answers.roundInterval),
+    roundNum,
     answers.roundIntervalUnit
   );
   const secondClaimTime = firstClaimTime + roundIntervalTime;

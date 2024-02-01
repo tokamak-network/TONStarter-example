@@ -55,7 +55,7 @@ export const getLocalTimeZone = () => {
 };
 
 export const convertToTimestamp = (date: string | Date) => {
-  return Date.parse(date.toString()) / 1000;
+  return Math.floor(Date.parse(date.toString()) / 1000);
 };
 
 export const getRoundInterval = (
