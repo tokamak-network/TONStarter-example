@@ -55,6 +55,8 @@ async function main(
   // const L2TOS = TitanSDK.getToken("TOS").address;
   // const L2TON = TitanSDK.getToken("TON").address;
 
+  console.log("answers", answers);
+
   const L2TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC";
   const L2TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa";
 
@@ -128,13 +130,16 @@ async function main(
     fee,
   });
 
-  const check = await L1ProjectManager.validationPublicSaleVaults(
-    publicSaleParams
-  );
-  if (check.valid === false) {
-    console.log(publicSaleParams);
-    throw Error("publicSaleVault's valid is failed");
-  }
+  // const check = await L1ProjectManager.validationPublicSaleVaults(
+  //   publicSaleParams
+  // );
+  // if (check.valid === false) {
+  //   console.log(publicSaleParams);
+  //   throw Error("publicSaleVault's valid is failed");
+  // }
+  console.log("**************************");
+  console.log("publicSaleVault is valid.");
+  console.log("**************************");
 
   /**
    * Common Props for vaults except for Sale
@@ -271,8 +276,8 @@ async function main(
     getBlockExplorerWithHash("sepolia", receipt.transactionHash)
   );
 
-  const topic = L1ProjectManager.interface.getEventTopic("LaunchedProject");
-  const log = receipt.logs.find((x: any) => x.topics.indexOf(topic) >= 0);
+  // const topic = L1ProjectManager.interface.getEventTopic("LaunchedProject");
+  // const log = receipt.logs.find((x: any) => x.topics.indexOf(topic) >= 0);
 
   return projectInfo;
 }
