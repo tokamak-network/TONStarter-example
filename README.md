@@ -23,9 +23,10 @@ RPC_ETHEREUM=$$$$
 RPC_SEPOLIA=$$$$
 RPC_TITAN=https://rpc.titan.tokamak.network
 RPC_TITAN_SEPOLIA=https://rpc.titan-goerli.tokamak.network
-TITAN_BLOCKEXPLORER=https://explorer.titan.tokamak.network
 WALLET_PK=$$$$
 ```
+
+We initially predicted that this project would run on Sepolia and named the variables accordingly. However, it currently operates on Goerli.
 
 4. Install the required dependencies
 
@@ -42,3 +43,13 @@ npm run create-tonstarter
 ### Quick Overview
 
 After executing the command, correctly answering all questions will automatically create tokens and projects on the Titan testnet and Ethereum testnet using the private key stored in the ENV file. Once all the necessary vaults for project progression are set up, the interface will also be configured automatically using the default template from [the TONStarter-templates repository]("https://github.com/tokamak-network/TONStarter-templates"). After all builds are complete, you can check it at http://localhost:3000/.
+
+### Token Economy
+
+| Vault      | Description                                                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Public     | Project tokens distributed to public investors to raise funding                                                             |
+| Liquidity  | For initial liquidity after raising funding                                                                                 |
+| Ecosystem  | For ecocsystem based on initial liquidity                                                                                   |
+| Team       | Future use cases for the Team like marketing                                                                                |
+| TONStarter | Project tokens distributed to holders who contributed liquidity in the form of TON-TOS exchange, who have staked TON or TOS |
