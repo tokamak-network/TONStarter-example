@@ -1,4 +1,7 @@
-# @tonstarter/sdk
+![](./TONStrater_SDK_BI.png)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+
+## tonstarter/sdk
 
 ### Installation
 
@@ -22,7 +25,6 @@ RPC_SEPOLIA=$$$$
 RPC_TITAN=https://rpc.titan.tokamak.network
 RPC_TITAN_SEPOLIA=https://rpc.titan-goerli.tokamak.network
 TITAN_BLOCKEXPLORER=https://explorer.titan.tokamak.network
-WALLET_ADDRESS=$$$$
 WALLET_PK=$$$$
 ```
 
@@ -37,3 +39,7 @@ npm i
 ```
 npm run create-tonstarter
 ```
+
+### Quick Overview
+
+After executing the command, correctly answering all questions will automatically create tokens and projects on the Titan testnet and Ethereum testnet using the private key stored in the ENV file. Once all the necessary vaults for project progression are set up, the interface will also be configured automatically using the default template from [the TONStarter-templates repository]("https://github.com/tokamak-network/TONStarter-templates"). After all builds are complete, you can check it at http://localhost:3000/.
