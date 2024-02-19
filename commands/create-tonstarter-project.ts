@@ -62,6 +62,8 @@ async function init() {
 
     const cliAnswers = await createCliAnswers(accountAddress);
 
+    console.log("cliAnswers", cliAnswers);
+
     //start to deploy contracts through toolkit
     const CLI = new CreateProject(cliAnswers);
     const deployOnL1 = new DeployProjectOnL1(CLI);

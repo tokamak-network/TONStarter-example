@@ -82,6 +82,9 @@ export const firstQuestions = [
       return `For example : if you enter 10, then your 10 ${answers.tokenSymbol} will have same price as 1 TON. Enter : `;
     },
     validate: (value: string) => validateNumberValue(value),
+    catch: (error: any) => {
+      console.log(error);
+    },
   },
   {
     type: "date",

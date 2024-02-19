@@ -19,6 +19,11 @@ export const getTonPrice = async (): Promise<string> => {
       }),
     }
   );
-  const tonPriceData = await tonPriceResponse.json();
-  return tonPriceData.data.getTokenMarketData.current_price;
+  try {
+    const tonPriceData = await tonPriceResponse.json();
+    return tonPriceData.data.getTokenMarketData.current_price;
+  } catch (error) {
+    // console.error("Error converting JSON:", error);
+    return "failed to fetch price"; // or handle the error in an appropriate way
+  }
 };

@@ -3,7 +3,7 @@ import { CLI_Answer, Vaults } from "../../types";
 import { integerDivision } from "./number";
 import { convertToTimestamp, getRoundInterval } from "../../utils/date";
 
-const formatAmount = (amount: number) => {
+const formatAmount = (amount: number): BigNumber => {
   return ethers.utils.parseUnits(String(amount), 18);
 };
 
@@ -200,11 +200,11 @@ export const getScheduleParams = (
     params: {
       claimer: claimer,
       totalAllocatedAmount: formatAmount(totalAmount),
-      totalClaimCount: formatAmount(totalClaimCount),
+      totalClaimCount: BigNumber.from(totalClaimCount),
       firstClaimAmount: formatAmount(firstClaimAmount),
-      firstClaimTime: firstClaimTime,
-      secondClaimTime: secondClaimTime,
-      roundIntervalTime: roundIntervalTime,
+      firstClaimTime,
+      secondClaimTime,
+      roundIntervalTime,
     },
   };
 };

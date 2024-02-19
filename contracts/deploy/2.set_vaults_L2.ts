@@ -130,13 +130,13 @@ async function main(
     fee,
   });
 
-  // const check = await L1ProjectManager.validationPublicSaleVaults(
-  //   publicSaleParams
-  // );
-  // if (check.valid === false) {
-  //   console.log(publicSaleParams);
-  //   throw Error("publicSaleVault's valid is failed");
-  // }
+  const check = await L1ProjectManager.validationPublicSaleVaults(
+    publicSaleParams
+  );
+  if (check.valid === false) {
+    console.log(publicSaleParams);
+    throw Error("publicSaleVault's valid is failed");
+  }
   console.log("**************************");
   console.log("publicSaleVault is valid.");
   console.log("**************************");
@@ -194,6 +194,18 @@ async function main(
    * Team
    */
   const team_fcAmount = firstClaimAmount.Team;
+  console.log("****TEAM PARAMS****");
+  console.log(
+    "TEAM",
+    answers.recevingAddress,
+    teamAmount, //totalAllocatedAmount
+    totalClaimCount, // totalClaimCount
+    team_fcAmount, //firstClaimAmount
+    firstClaimTime, //firstClaimTime
+    secondClaimTime, //secondClaimTime
+    roundIntervalTime //roundIntervalTime)
+  );
+
   const teamVault = getScheduleParams(
     "TEAM",
     answers.recevingAddress,
@@ -258,6 +270,17 @@ async function main(
 
   const customScheduleVaults = [teamVault];
 
+  console.log("*****Trying to setup a project on L1*****");
+  console.log("*****params******");
+  console.log(
+    projectInfo.projectId,
+    projectInfo.l2Token,
+    projectInfo.initialTotalSupply,
+    tokamakVaults,
+    customScheduleVaults,
+    []
+  );
+
   const receipt = await (
     await L1ProjectManager.launchProjectExceptCheckPublic(
       projectInfo.projectId,
@@ -289,6 +312,9 @@ async function setUpVaults(
   try {
     if (!projectInfo)
       throw new Error("projectInfo is undefined at setVaultsOnL2");
+    console.log(
+      Object.values(answers.vaults).map((vault) => vault.claimSchedule)
+    );
     const result = await main(projectInfo, answers);
     return { state: true, result };
   } catch (e) {
