@@ -48,14 +48,17 @@ async function main(
     chainId: 5,
     signerOrProvider: l1Signer,
   });
-  const L1ProjectManager = EthereumSDK.getContract("L1ProjectManagerProxy");
+  // const L1ProjectManager = EthereumSDK.getContract("L1ProjectManagerProxy");
+  const L1ProjectManager = new Contract(
+    EthereumSDK.getContract("L1ProjectManagerProxy").address,
+    L1ProjectManagerJson.abi,
+    l1Signer
+  );
   // const TitanSDK = new MultiChainSDK({
   //   chainId: 5050,
   // });
   // const L2TOS = TitanSDK.getToken("TOS").address;
   // const L2TON = TitanSDK.getToken("TON").address;
-
-  console.log("answers", answers);
 
   const L2TOS = "0x6AF3cb766D6cd37449bfD321D961A61B0515c1BC";
   const L2TON = "0xFa956eB0c4b3E692aD5a6B2f08170aDE55999ACa";
@@ -67,7 +70,7 @@ async function main(
     rewardProjectTosPoolAmount,
     airdropStosAmount,
     airdropTonAmount,
-    teamAmount,
+    // teamAmount,
   } = getVaultTokenAllocation(answers);
 
   const {
@@ -105,7 +108,7 @@ async function main(
     percents: [2500, 2500, 2500, 2500], // percentage,
     saleAmount: [round1Amount, round2Amount],
     price: [200, 2000],
-    hardcapAmount: 100 * 1e18,
+    hardcapAmount: 100,
     changeTOSPercent: changeTOS,
     times: [
       whitelistStartTime,
@@ -193,29 +196,29 @@ async function main(
   /**
    * Team
    */
-  const team_fcAmount = firstClaimAmount.Team;
-  console.log("****TEAM PARAMS****");
-  console.log(
-    "TEAM",
-    answers.recevingAddress,
-    teamAmount, //totalAllocatedAmount
-    totalClaimCount, // totalClaimCount
-    team_fcAmount, //firstClaimAmount
-    firstClaimTime, //firstClaimTime
-    secondClaimTime, //secondClaimTime
-    roundIntervalTime //roundIntervalTime)
-  );
+  // const team_fcAmount = firstClaimAmount.Team;
+  // console.log("****TEAM PARAMS****");
+  // console.log(
+  //   "TEAM",
+  //   answers.recevingAddress,
+  //   teamAmount, //totalAllocatedAmount
+  //   totalClaimCount, // totalClaimCount
+  //   team_fcAmount, //firstClaimAmount
+  //   firstClaimTime, //firstClaimTime
+  //   secondClaimTime, //secondClaimTime
+  //   roundIntervalTime //roundIntervalTime)
+  // );
 
-  const teamVault = getScheduleParams(
-    "TEAM",
-    answers.recevingAddress,
-    teamAmount, //totalAllocatedAmount
-    totalClaimCount, // totalClaimCount
-    team_fcAmount, //firstClaimAmount
-    firstClaimTime, //firstClaimTime
-    secondClaimTime, //secondClaimTime
-    roundIntervalTime //roundIntervalTime
-  );
+  // const teamVault = getScheduleParams(
+  //   "TEAM",
+  //   answers.recevingAddress,
+  //   teamAmount, //totalAllocatedAmount
+  //   totalClaimCount, // totalClaimCount
+  //   team_fcAmount, //firstClaimAmount
+  //   firstClaimTime, //firstClaimTime
+  //   secondClaimTime, //secondClaimTime
+  //   roundIntervalTime //roundIntervalTime
+  // );
 
   /**
    * TONStarter
@@ -268,7 +271,7 @@ async function main(
     tonAirdropParams,
   };
 
-  const customScheduleVaults = [teamVault];
+  // const customScheduleVaults = [teamVault];
 
   console.log("*****Trying to setup a project on L1*****");
   console.log("*****params******");
@@ -277,17 +280,22 @@ async function main(
     projectInfo.l2Token,
     projectInfo.initialTotalSupply,
     tokamakVaults,
-    customScheduleVaults,
+    [],
+    // customScheduleVaults,
     []
   );
 
+  const check_validateTokamakVaults =
+    await L1ProjectManager.validateTokamakVaults(tokamakVaults);
+
   const receipt = await (
-    await L1ProjectManager.launchProjectExceptCheckPublic(
+    await L1ProjectManager.launchProject(
       projectInfo.projectId,
       projectInfo.l2Token,
       projectInfo.initialTotalSupply,
       tokamakVaults,
-      customScheduleVaults,
+      [],
+      // customScheduleVaults,
       []
     )
   ).wait();
@@ -312,9 +320,6 @@ async function setUpVaults(
   try {
     if (!projectInfo)
       throw new Error("projectInfo is undefined at setVaultsOnL2");
-    console.log(
-      Object.values(answers.vaults).map((vault) => vault.claimSchedule)
-    );
     const result = await main(projectInfo, answers);
     return { state: true, result };
   } catch (e) {

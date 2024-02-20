@@ -3,8 +3,8 @@ import { CLI_Answer, Vaults } from "../../types";
 import { integerDivision } from "./number";
 import { convertToTimestamp, getRoundInterval } from "../../utils/date";
 
-const formatAmount = (amount: number): BigNumber => {
-  return ethers.utils.parseUnits(String(amount), 18);
+const formatAmount = (amount: number) => {
+  return ethers.utils.parseUnits(String(amount), 18).toString();
 };
 
 export const getPublicSaleParams = (params: {
@@ -64,29 +64,29 @@ export const getPublicSaleParams = (params: {
     payTokenPrice: formatAmount(price[1]),
     hardcapAmount: formatAmount(hardcapAmount),
     changeTOSPercent,
-    startWhiteTime: formatAmount(times[0]),
-    endWhiteTime: formatAmount(times[1]),
-    start1roundTime: formatAmount(times[2]),
-    end1roundTime: formatAmount(times[3]),
-    snapshotTime: formatAmount(times[4]),
-    start2roundTime: formatAmount(times[5]),
-    end2roundTime: formatAmount(times[6]),
+    startWhiteTime: times[0],
+    endWhiteTime: times[1],
+    start1roundTime: times[2],
+    end1roundTime: times[3],
+    snapshotTime: times[4],
+    start2roundTime: times[5],
+    end2roundTime: times[6],
   };
 
   let InitalParameterPublicSaleClaim = {
-    claimCounts: formatAmount(claimCounts),
-    firstClaimPercent: formatAmount(firstClaimPercent),
-    firstClaimTime: formatAmount(firstClaimTime),
-    secondClaimTime: formatAmount(secondClaimTime),
-    roundInterval: formatAmount(roundInterval),
+    claimCounts: claimCounts,
+    firstClaimPercent: firstClaimPercent,
+    firstClaimTime: firstClaimTime,
+    secondClaimTime: secondClaimTime,
+    roundInterval: roundInterval,
   };
   let InitialParameterVestingClaim = {
     receiveAddress,
-    totalClaimCount: formatAmount(vestingClaimCounts),
-    firstClaimPercent: formatAmount(vestingfirstClaimPercent),
-    firstClaimTime: formatAmount(vestingClaimTime1),
-    secondClaimTime: formatAmount(vestingClaimTime2),
-    roundIntervalTime: formatAmount(vestingRoundInterval),
+    totalClaimCount: vestingClaimCounts,
+    firstClaimPercent: vestingfirstClaimPercent,
+    firstClaimTime: vestingClaimTime1,
+    secondClaimTime: vestingClaimTime2,
+    roundIntervalTime: vestingRoundInterval,
     fee: fee,
   };
 
@@ -136,7 +136,7 @@ export const getLpRewardParams = (
     params: {
       claimer: claimer,
       totalAllocatedAmount: formatAmount(totalAmount),
-      totalClaimCount: formatAmount(totalClaimCount),
+      totalClaimCount,
       firstClaimAmount: formatAmount(firstClaimAmount),
       firstClaimTime: firstClaimTime,
       secondClaimTime: secondClaimTime,
@@ -157,7 +157,7 @@ export const getTosAirdropParams = (
   return {
     claimer: claimer,
     totalAllocatedAmount: formatAmount(totalAmount),
-    totalClaimCount: formatAmount(totalClaimCount),
+    totalClaimCount,
     firstClaimAmount: formatAmount(firstClaimAmount),
     firstClaimTime: firstClaimTime,
     secondClaimTime: secondClaimTime,
@@ -177,7 +177,7 @@ export const getTonAirdropParams = (
   return {
     claimer: claimer,
     totalAllocatedAmount: formatAmount(totalAmount),
-    totalClaimCount: formatAmount(totalClaimCount),
+    totalClaimCount,
     firstClaimAmount: formatAmount(firstClaimAmount),
     firstClaimTime: firstClaimTime,
     secondClaimTime: secondClaimTime,
@@ -200,7 +200,7 @@ export const getScheduleParams = (
     params: {
       claimer: claimer,
       totalAllocatedAmount: formatAmount(totalAmount),
-      totalClaimCount: BigNumber.from(totalClaimCount),
+      totalClaimCount,
       firstClaimAmount: formatAmount(firstClaimAmount),
       firstClaimTime,
       secondClaimTime,
@@ -233,7 +233,7 @@ export const getVaultTokenAllocation = (answers: CLI_Answer) => {
   const rewardProjectTosPoolAmount =
     ecosystemAmount.allocation + ecosystemAmount.remainder;
 
-  const teamAmount = integerDivision(answers.vaults.Team.tokenAllocation, 1);
+  // const teamAmount = integerDivision(answers.vaults.Team.tokenAllocation, 1);
 
   //TON Staker, TOS Staker, TON-TOS LP
   const tonstarterAmount = integerDivision(
@@ -250,7 +250,7 @@ export const getVaultTokenAllocation = (answers: CLI_Answer) => {
     saleAmount,
     initialLiquidityAmount,
     rewardProjectTosPoolAmount,
-    teamAmount: teamAmount.allocation,
+    // teamAmount: teamAmount.allocation,
     rewardTonTosPoolAmount,
     airdropStosAmount,
     airdropTonAmount,
@@ -331,14 +331,14 @@ export const getFirstClaimAmountForAllVaults = (
 } => {
   const fcAmount_InitialLiquidity = getFirstClaimAmount(vaults, "Liquidity");
   const fcAmount_Ecosystem = getFirstClaimAmount(vaults, "Ecosystem");
-  const fcAmount_Team = getFirstClaimAmount(vaults, "Team");
+  // const fcAmount_Team = getFirstClaimAmount(vaults, "Team");
   const fcAmount_Tonstarter = getFirstClaimAmount(vaults, "TONStarter");
 
   return {
     Public: 0,
     Liquidity: fcAmount_InitialLiquidity,
     Ecosystem: fcAmount_Ecosystem,
-    Team: fcAmount_Team,
+    // Team: fcAmount_Team,
     TONStarter: fcAmount_Tonstarter,
   };
 };

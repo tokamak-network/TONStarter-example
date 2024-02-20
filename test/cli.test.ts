@@ -12,7 +12,9 @@ import {
 
 const getScheduleTime = (mins: number) => {
   const now = new Date();
-  const oneHourLater = new Date(now.getTime() + mins * 60 * 1000);
+  const oneHourLater = new Date(
+    now.getTime() + mins * 60 * 60 * 1000 + 24 * 60 * 60 * 1000
+  );
   return oneHourLater.toISOString();
 };
 
@@ -80,6 +82,63 @@ const testAnswer1 = {
     },
   },
 };
+
+const testAnswerWithOnlyTokamakVaults = {
+  projectName: "TEST",
+  tokenName: "TET",
+  tokenSymbol: "TET",
+  initialTotalSupply: "100000",
+  totalTokenAllocation: "100000",
+  tokenPrice: "10",
+  snapshot: getScheduleTime(10),
+  whitelistStart: getScheduleTime(12),
+  whitelistEnd: getScheduleTime(14),
+  round1Start: getScheduleTime(16),
+  round1End: getScheduleTime(18),
+  round2Start: getScheduleTime(20),
+  round2End: getScheduleTime(22),
+  claimStart: getScheduleTime(23),
+  totalRoundChoice: "3",
+  roundIntervalUnit: "Monthly",
+  roundInterval: "1 Month",
+  adminAddress: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
+  recevingAddress: "0xAA5a562B2C3CA302aFa35db0b94738A7384d6aA3",
+  totalRound: 3,
+  vaults: {
+    Public: {
+      tokenAllocation: 30000,
+      claimSchedule: [
+        { tokenAllocation: 10000, date: getScheduleTime(23) },
+        { tokenAllocation: 10000, date: getScheduleTime(24) },
+        { tokenAllocation: 10000, date: getScheduleTime(25) },
+      ],
+    },
+    Liquidity: {
+      tokenAllocation: 15000,
+      claimSchedule: [
+        { tokenAllocation: 5000, date: getScheduleTime(23) },
+        { tokenAllocation: 5000, date: getScheduleTime(24) },
+        { tokenAllocation: 5000, date: getScheduleTime(25) },
+      ],
+    },
+    Ecosystem: {
+      tokenAllocation: 35000,
+      claimSchedule: [
+        { tokenAllocation: 11666.66, date: getScheduleTime(23) },
+        { tokenAllocation: 11666.66, date: getScheduleTime(24) },
+        { tokenAllocation: 11666.68, date: getScheduleTime(25) },
+      ],
+    },
+    TONStarter: {
+      tokenAllocation: 20000,
+      claimSchedule: [
+        { tokenAllocation: 10000, date: getScheduleTime(23) },
+        { tokenAllocation: 5000, date: getScheduleTime(24) },
+        { tokenAllocation: 5000, date: getScheduleTime(25) },
+      ],
+    },
+  },
+};
 async function init() {
   const { l1Signer } = await walletSetup();
 
@@ -97,7 +156,9 @@ async function init() {
   // console.log(d);
 
   //start to deploy contracts through toolkit
-  const CLI = new CreateProject(testAnswer1 as any);
+  // const CLI = new CreateProject(testAnswer1 as any);
+  const CLI = new CreateProject(testAnswerWithOnlyTokamakVaults as any);
+
   const deployOnL1 = new DeployProjectOnL1(CLI);
   const setTokenOnL2 = new SetTokenOnL2(CLI);
   const setUpVaults = new SetUpVaults(CLI);

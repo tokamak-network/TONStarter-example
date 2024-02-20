@@ -12,6 +12,11 @@ export const getWallet = () => {
   return wallet;
 };
 
+export const getAccountAddress = () => {
+  const wallet = getWallet();
+  return wallet?.address;
+};
+
 export const getL1Provider = async () => {
   const l1RpcProvider = new ethers.providers.JsonRpcProvider(l1Url);
   return l1RpcProvider;

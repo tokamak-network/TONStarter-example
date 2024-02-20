@@ -53,3 +53,9 @@ After executing the command, correctly answering all questions will automaticall
 | Ecosystem  | For ecocsystem based on initial liquidity                                                                                   |
 | Team       | Future use cases for the Team like marketing                                                                                |
 | TONStarter | Project tokens distributed to holders who contributed liquidity in the form of TON-TOS exchange, who have staked TON or TOS |
+
+### Contact
+
+For any inquiries, you can reach me through [my GitHub profile](https://github.com/SonYoungsung)
+
+Or you can leave a message on the GitHub forum.
