@@ -3,10 +3,10 @@
   "version": "1.0.4",
   "description": "TONStarter sdk",
   "scripts": {
-    "create-tonstarter": "tsx ./commands/create-tonstarter-project.ts"
+    "create-project": "tsx ./commands/create-tonstarter-project.ts"
   },
   "bin": {
-    "create-tonstarter": "./bin/create-tonstarter-project.js"
+    "create-project": "./bin/create-tonstarter-project.js"
   },
   "author": "",
   "license": "ISC",

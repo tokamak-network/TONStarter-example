@@ -11,7 +11,7 @@ import { ZERO_ADDRESS, walletSetup } from "../../constants";
 async function main(project: DeployedProjectInfo) {
   // const TITAN_GOERLI_CONTRACTS = lib.contracts.tonstarter["titan-goerli"];
   const TITAN_GOERLI_CONTRACTS = {
-    L2TokenFactory: "0x42773cf37d7e2757a41d14ca130cd1ac8ac5064a",
+    L2TokenFactory: "0x52D3b95E94863590D9A366718C2C839510b68b60",
   };
   const { l2Signer } = await walletSetup();
   let projectInfo = project;

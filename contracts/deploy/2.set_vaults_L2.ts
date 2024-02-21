@@ -1,10 +1,9 @@
 import { BigNumber, Contract, ethers } from "ethers";
-// import { setup } from "../setup/index.js";
 //@ts-ignore
 import univ3prices from "@thanpolas/univ3prices";
 
-//abis
 import L1ProjectManagerJson from "../abis/goerli/L1ProjectManager.json";
+import L2ProjectManagerABI from "../abis/titan-goerli/L2ProjectManager.json";
 import {
   getPublicSaleParams,
   getInitialLiquidityParams,
@@ -43,20 +42,18 @@ async function main(
   projectInfo: DeployedProjectInfo,
   answers: CLI_Answer
 ): Promise<DeployedProjectInfo> {
-  const { l1Signer } = await walletSetup();
+  const { l1Signer, l2Signer } = await walletSetup();
   const EthereumSDK = new MultiChainSDK({
     chainId: 5,
     signerOrProvider: l1Signer,
   });
+
   // const L1ProjectManager = EthereumSDK.getContract("L1ProjectManagerProxy");
   const L1ProjectManager = new Contract(
     EthereumSDK.getContract("L1ProjectManagerProxy").address,
     L1ProjectManagerJson.abi,
     l1Signer
   );
-  // const TitanSDK = new MultiChainSDK({
-  //   chainId: 5050,
-  // });
   // const L2TOS = TitanSDK.getToken("TOS").address;
   // const L2TON = TitanSDK.getToken("TON").address;
 
@@ -310,7 +307,54 @@ async function main(
   // const topic = L1ProjectManager.interface.getEventTopic("LaunchedProject");
   // const log = receipt.logs.find((x: any) => x.topics.indexOf(topic) >= 0);
 
-  return projectInfo;
+  const L2ProjectManager = new Contract(
+    "0xEaFa9b1436B9c25d40CA0e25ba142fc0C9C09b1a",
+    L2ProjectManagerABI.abi,
+    l2Signer
+  );
+
+  const TEST_1 = await L2ProjectManager.projects(projectInfo.l2Token);
+  const TEST_2 = await L2ProjectManager.tokenMaps(projectInfo.l1Token);
+  console.log("TEST_1", TEST_1);
+  console.log("TEST_2", TEST_2);
+
+  // async function waitUntilTimeoutComplete() {
+  //   return new Promise((resolve) => {
+  //     setTimeout(async () => {
+  //       console.log("params");
+  //       console.log(
+  //         projectInfo.l1Token,
+  //         projectInfo.l2Token,
+  //         projectInfo.projectId,
+  //         projectInfo.initialTotalSupply,
+  //         tokamakVaults,
+  //         [],
+  //         // customScheduleVaults,
+  //         []
+  //       );
+
+  //       const TEST_CONTRACT_RECEIPT = await (
+  //         await L2ProjectManager.distributesL2TokenOwner(
+  //           projectInfo.l1Token,
+  //           projectInfo.l2Token,
+  //           projectInfo.projectId,
+  //           projectInfo.initialTotalSupply,
+  //           tokamakVaults,
+  //           [],
+  //           // customScheduleVaults,
+  //           []
+  //         )
+  //       ).wait();
+
+  //       console.log("**TEST RESULT**");
+  //       console.log(TEST_CONTRACT_RECEIPT);
+
+  //       resolve(projectInfo);
+  //     }, 120000); // 5분 대기
+  //   });
+  // }
+
+  // await waitUntilTimeoutComplete();
 }
 
 async function setUpVaults(

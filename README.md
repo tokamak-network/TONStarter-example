@@ -37,12 +37,14 @@ npm i
 5. Run the command to start your TONStarter project
 
 ```
-npm run create-tonstarter
+npm run create-project
 ```
 
 ### Quick Overview
 
 After executing the command, correctly answering all questions will automatically create tokens and projects on the Titan testnet and Ethereum testnet using the private key stored in the ENV file. Once all the necessary vaults for project progression are set up, the interface will also be configured automatically using the default template from [the TONStarter-templates repository]("https://github.com/tokamak-network/TONStarter-templates"). After all builds are complete, you can check it at http://localhost:3000/.
+
+###
 
 ### Token Economy
 
