@@ -140,23 +140,17 @@ const testAnswerWithOnlyTokamakVaults = {
   },
 };
 async function init() {
-  const { l1Signer } = await walletSetup();
+  // const { l1Signer } = await walletSetup();
 
-  const EthereumSDK = new MultiChainSDK({
-    chainId: 5,
-    signerOrProvider: l1Signer,
-  });
+  // const EthereumSDK = new MultiChainSDK({
+  //   chainId: 5,
+  //   signerOrProvider: l1Signer,
+  // });
   // const TitanSDK = new MultiChainSDK({
   //   chainId: 55004,
   // });
-  // // const block = await sdk.provider.getBlock("latest");
-  // // console.log(block.timestamp);
-  // console.log(EthereumSDK.getContract("L1ProjectManagerProxy"));
-  // const d = sdk.getContract("L1ProjectManagerProxy");
-  // console.log(d);
 
   //start to deploy contracts through toolkit
-  // const CLI = new CreateProject(testAnswer1 as any);
   const CLI = new CreateProject(testAnswer1 as any);
 
   const deployOnL1 = new DeployProjectOnL1(CLI);
@@ -165,7 +159,11 @@ async function init() {
 
   CLI.addStepChangeListener([deployOnL1, setTokenOnL2, setUpVaults]);
   const deployed = await CLI.start();
-  console.log("deployed", deployed);
+  if (deployed) {
+    return console.log(
+      `🚀All process is done. You just need to wait for depositing your tokens.`
+    );
+  }
 }
 
 init();

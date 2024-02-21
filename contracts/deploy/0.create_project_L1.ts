@@ -23,7 +23,7 @@ import { MultiChainSDK } from "tokamak-multichain";
 /**
  * @param {Answers}
  */
-async function main(answers: CLI_Answer) {
+async function main(answers: CLI_Answer): Promise<DeployedProjectInfo> {
   const {
     adminAddress,
     tokenName,
@@ -47,7 +47,9 @@ async function main(answers: CLI_Answer) {
 
   const { l1Signer } = await walletSetup();
 
-  if (!l1Signer) return;
+  if (!l1Signer) {
+    return undefined;
+  }
 
   const EthereumSDK = new MultiChainSDK({
     chainId: 5,

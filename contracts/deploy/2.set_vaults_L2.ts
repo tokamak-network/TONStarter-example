@@ -41,7 +41,7 @@ import { integerDivision } from "../utils/number";
 async function main(
   projectInfo: DeployedProjectInfo,
   answers: CLI_Answer
-): Promise<boolean> {
+): Promise<DeployedProjectInfo> {
   const { l1Signer, l2Signer } = await walletSetup();
   const EthereumSDK = new MultiChainSDK({
     chainId: 5,
@@ -286,7 +286,7 @@ async function main(
   ).wait();
 
   console.log("\r");
-  console.log("Your token successfully distributed on L1!!");
+  console.log("Your token successfully deposited from L1 to L2");
   console.log(
     "See your tx 👉",
     getBlockExplorerWithHash("sepolia", receipt.transactionHash)
@@ -295,7 +295,7 @@ async function main(
   const topic = L1ProjectManager.interface.getEventTopic("LaunchedProject");
   const log = receipt.logs.find((x: any) => x.topics.indexOf(topic) >= 0);
 
-  return true;
+  return projectInfo;
 }
 
 async function setUpVaults(

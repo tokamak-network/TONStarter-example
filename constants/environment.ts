@@ -1,13 +1,16 @@
 import { ethers, Wallet } from "ethers";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "./../.env" });
 
 const l1Url = process.env.RPC_SEPOLIA;
 const l2Url = process.env.RPC_TITAN_SEPOLIA;
 const privateKey = process.env.WALLET_PK;
 
 export const getWallet = () => {
-  if (!privateKey) return null;
+  if (!privateKey) {
+    console.error("No private key found in .env file");
+    return null;
+  }
 
   const wallet = new ethers.Wallet(privateKey);
   return wallet;

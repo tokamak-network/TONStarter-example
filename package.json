@@ -24,7 +24,7 @@
     "inquirer-table-input": "^0.0.3",
     "ora": "^7.0.1",
     "tokamak-dapp-sdk": "^1.0.0",
-    "tokamak-multichain": "^1.1.2"
+    "tokamak-multichain": "^1.1.4"
   },
   "type": "module",
   "devDependencies": {
