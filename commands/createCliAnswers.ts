@@ -53,7 +53,10 @@ export const createCliAnswers = async (
   const cliAnswersForFinalRound: CLI_Answer = {
     ...initialResponse,
     adminAddress: accountAddress,
-    recevingAddress: validatedAccountInfo.recevingAddress,
+    recevingAddress:
+      validatedAccountInfo.recevingAddress === true
+        ? accountAddress
+        : validatedAccountInfo.recevingAddress,
     totalRound:
       initialResponse.totalRoundChoice === "Other"
         ? Number(initialResponse.totalRoundInput)

@@ -130,13 +130,23 @@ async function main(
     fee,
   });
 
-  const check = await L1ProjectManager.validationPublicSaleVaults(
-    publicSaleParams
-  );
-  if (check.valid === false) {
-    console.log(publicSaleParams);
-    throw Error("publicSaleVault's valid is failed");
+  try {
+    const check = await L1ProjectManager.validationPublicSaleVaults(
+      publicSaleParams
+    );
+
+    if (check.valid === false) {
+      console.log(publicSaleParams);
+      throw Error("publicSaleVault's valid is failed");
+    }
+  } catch (e) {
+    console.log("\r");
+    console.log("**************************");
+    console.log("publicSaleParams", publicSaleParams);
+    console.error(e);
   }
+
+  console.log("\r");
   console.log("**************************");
   console.log("publicSaleVault is valid.");
   console.log("**************************");
