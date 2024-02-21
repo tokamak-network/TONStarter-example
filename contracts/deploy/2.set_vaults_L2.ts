@@ -259,16 +259,16 @@ async function main(
 
   const customScheduleVaults = [teamVault];
 
-  console.log("*****Trying to setup a project on L1*****");
-  console.log("*****params******");
-  console.log(
-    projectInfo.projectId,
-    projectInfo.l2Token,
-    projectInfo.initialTotalSupply,
-    tokamakVaults,
-    customScheduleVaults,
-    []
-  );
+  // console.log("*****Trying to setup a project on L1*****");
+  // console.log("*****params******");
+  // console.log(
+  //   projectInfo.projectId,
+  //   projectInfo.l2Token,
+  //   projectInfo.initialTotalSupply,
+  //   tokamakVaults,
+  //   customScheduleVaults,
+  //   []
+  // );
 
   const check_validateTokamakVaults =
     await L1ProjectManager.validateTokamakVaults(tokamakVaults);

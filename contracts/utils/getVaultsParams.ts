@@ -331,14 +331,14 @@ export const getFirstClaimAmountForAllVaults = (
 } => {
   const fcAmount_InitialLiquidity = getFirstClaimAmount(vaults, "Liquidity");
   const fcAmount_Ecosystem = getFirstClaimAmount(vaults, "Ecosystem");
-  // const fcAmount_Team = getFirstClaimAmount(vaults, "Team");
+  const fcAmount_Team = getFirstClaimAmount(vaults, "Team");
   const fcAmount_Tonstarter = getFirstClaimAmount(vaults, "TONStarter");
 
   return {
     Public: 0,
     Liquidity: fcAmount_InitialLiquidity,
     Ecosystem: fcAmount_Ecosystem,
-    // Team: fcAmount_Team,
+    Team: fcAmount_Team,
     TONStarter: fcAmount_Tonstarter,
   };
 };
