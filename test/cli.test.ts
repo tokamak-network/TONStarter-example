@@ -157,7 +157,7 @@ async function init() {
 
   //start to deploy contracts through toolkit
   // const CLI = new CreateProject(testAnswer1 as any);
-  const CLI = new CreateProject(testAnswerWithOnlyTokamakVaults as any);
+  const CLI = new CreateProject(testAnswer1 as any);
 
   const deployOnL1 = new DeployProjectOnL1(CLI);
   const setTokenOnL2 = new SetTokenOnL2(CLI);

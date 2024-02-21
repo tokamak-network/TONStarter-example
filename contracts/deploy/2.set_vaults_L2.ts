@@ -41,7 +41,7 @@ import { integerDivision } from "../utils/number";
 async function main(
   projectInfo: DeployedProjectInfo,
   answers: CLI_Answer
-): Promise<DeployedProjectInfo> {
+): Promise<boolean> {
   const { l1Signer, l2Signer } = await walletSetup();
   const EthereumSDK = new MultiChainSDK({
     chainId: 5,
@@ -67,7 +67,7 @@ async function main(
     rewardProjectTosPoolAmount,
     airdropStosAmount,
     airdropTonAmount,
-    // teamAmount,
+    teamAmount,
   } = getVaultTokenAllocation(answers);
 
   const {
@@ -193,29 +193,18 @@ async function main(
   /**
    * Team
    */
-  // const team_fcAmount = firstClaimAmount.Team;
-  // console.log("****TEAM PARAMS****");
-  // console.log(
-  //   "TEAM",
-  //   answers.recevingAddress,
-  //   teamAmount, //totalAllocatedAmount
-  //   totalClaimCount, // totalClaimCount
-  //   team_fcAmount, //firstClaimAmount
-  //   firstClaimTime, //firstClaimTime
-  //   secondClaimTime, //secondClaimTime
-  //   roundIntervalTime //roundIntervalTime)
-  // );
+  const team_fcAmount = firstClaimAmount.Team;
 
-  // const teamVault = getScheduleParams(
-  //   "TEAM",
-  //   answers.recevingAddress,
-  //   teamAmount, //totalAllocatedAmount
-  //   totalClaimCount, // totalClaimCount
-  //   team_fcAmount, //firstClaimAmount
-  //   firstClaimTime, //firstClaimTime
-  //   secondClaimTime, //secondClaimTime
-  //   roundIntervalTime //roundIntervalTime
-  // );
+  const teamVault = getScheduleParams(
+    "TEAM",
+    answers.recevingAddress,
+    teamAmount, //totalAllocatedAmount
+    totalClaimCount, // totalClaimCount
+    team_fcAmount, //firstClaimAmount
+    firstClaimTime, //firstClaimTime
+    secondClaimTime, //secondClaimTime
+    roundIntervalTime //roundIntervalTime
+  );
 
   /**
    * TONStarter
@@ -268,7 +257,7 @@ async function main(
     tonAirdropParams,
   };
 
-  // const customScheduleVaults = [teamVault];
+  const customScheduleVaults = [teamVault];
 
   console.log("*****Trying to setup a project on L1*****");
   console.log("*****params******");
@@ -277,8 +266,7 @@ async function main(
     projectInfo.l2Token,
     projectInfo.initialTotalSupply,
     tokamakVaults,
-    [],
-    // customScheduleVaults,
+    customScheduleVaults,
     []
   );
 
@@ -291,8 +279,8 @@ async function main(
       projectInfo.l2Token,
       projectInfo.initialTotalSupply,
       tokamakVaults,
-      [],
-      // customScheduleVaults,
+
+      customScheduleVaults,
       []
     )
   ).wait();
@@ -304,57 +292,10 @@ async function main(
     getBlockExplorerWithHash("sepolia", receipt.transactionHash)
   );
 
-  // const topic = L1ProjectManager.interface.getEventTopic("LaunchedProject");
-  // const log = receipt.logs.find((x: any) => x.topics.indexOf(topic) >= 0);
+  const topic = L1ProjectManager.interface.getEventTopic("LaunchedProject");
+  const log = receipt.logs.find((x: any) => x.topics.indexOf(topic) >= 0);
 
-  const L2ProjectManager = new Contract(
-    "0xEaFa9b1436B9c25d40CA0e25ba142fc0C9C09b1a",
-    L2ProjectManagerABI.abi,
-    l2Signer
-  );
-
-  const TEST_1 = await L2ProjectManager.projects(projectInfo.l2Token);
-  const TEST_2 = await L2ProjectManager.tokenMaps(projectInfo.l1Token);
-  console.log("TEST_1", TEST_1);
-  console.log("TEST_2", TEST_2);
-
-  // async function waitUntilTimeoutComplete() {
-  //   return new Promise((resolve) => {
-  //     setTimeout(async () => {
-  //       console.log("params");
-  //       console.log(
-  //         projectInfo.l1Token,
-  //         projectInfo.l2Token,
-  //         projectInfo.projectId,
-  //         projectInfo.initialTotalSupply,
-  //         tokamakVaults,
-  //         [],
-  //         // customScheduleVaults,
-  //         []
-  //       );
-
-  //       const TEST_CONTRACT_RECEIPT = await (
-  //         await L2ProjectManager.distributesL2TokenOwner(
-  //           projectInfo.l1Token,
-  //           projectInfo.l2Token,
-  //           projectInfo.projectId,
-  //           projectInfo.initialTotalSupply,
-  //           tokamakVaults,
-  //           [],
-  //           // customScheduleVaults,
-  //           []
-  //         )
-  //       ).wait();
-
-  //       console.log("**TEST RESULT**");
-  //       console.log(TEST_CONTRACT_RECEIPT);
-
-  //       resolve(projectInfo);
-  //     }, 120000); // 5분 대기
-  //   });
-  // }
-
-  // await waitUntilTimeoutComplete();
+  return true;
 }
 
 async function setUpVaults(

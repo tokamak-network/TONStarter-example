@@ -233,7 +233,7 @@ export const getVaultTokenAllocation = (answers: CLI_Answer) => {
   const rewardProjectTosPoolAmount =
     ecosystemAmount.allocation + ecosystemAmount.remainder;
 
-  // const teamAmount = integerDivision(answers.vaults.Team.tokenAllocation, 1);
+  const teamAmount = integerDivision(answers.vaults.Team.tokenAllocation, 1);
 
   //TON Staker, TOS Staker, TON-TOS LP
   const tonstarterAmount = integerDivision(
@@ -250,7 +250,7 @@ export const getVaultTokenAllocation = (answers: CLI_Answer) => {
     saleAmount,
     initialLiquidityAmount,
     rewardProjectTosPoolAmount,
-    // teamAmount: teamAmount.allocation,
+    teamAmount: teamAmount.allocation,
     rewardTonTosPoolAmount,
     airdropStosAmount,
     airdropTonAmount,

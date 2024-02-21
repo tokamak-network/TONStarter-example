@@ -29,8 +29,6 @@ async function init(): Promise<void> {
 
     const cliAnswers = await createCliAnswers(accountAddress);
 
-    console.log("cliAnswers", cliAnswers);
-
     //start to deploy contracts through toolkit
     const CLI = new CreateProject(cliAnswers);
     const deployOnL1 = new DeployProjectOnL1(CLI);
@@ -40,10 +38,8 @@ async function init(): Promise<void> {
     CLI.addStepChangeListener([deployOnL1, setTokenOnL2, setUpVaults]);
     const deployed = await CLI.start();
 
-    console.log("deployed", deployed);
-
     if (deployed && CLI.projectInfo) {
-      // return cloneTemplate(CLI.projectInfo);
+      return cloneTemplate(CLI.projectInfo);
       // return console.log(
       //   "🚀All process is done. You just need to wait for depositing your tokens."
       // );
