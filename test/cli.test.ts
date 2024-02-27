@@ -9,13 +9,12 @@ import {
   SetTokenOnL2,
   SetUpVaults,
 } from "../commands/deployProject";
+import { cloneTemplate } from "../commands/cloneTemplate";
 
 const getScheduleTime = (mins: number) => {
   const now = new Date();
-  const oneHourLater = new Date(
-    now.getTime() + mins * 60 * 60 * 1000 + 24 * 60 * 60 * 1000
-  );
-  return oneHourLater.toISOString();
+  const tenMinutesLater = new Date(now.getTime() + (10 + mins) * 60 * 1000);
+  return tenMinutesLater.toISOString();
 };
 
 const testAnswer1 = {
@@ -160,9 +159,12 @@ async function init() {
   CLI.addStepChangeListener([deployOnL1, setTokenOnL2, setUpVaults]);
   const deployed = await CLI.start();
   if (deployed) {
-    return console.log(
+    console.log(
       `🚀All process is done. You just need to wait for depositing your tokens.`
     );
+    if (deployed && CLI.projectInfo) {
+      return cloneTemplate(CLI.projectInfo);
+    }
   }
 }
 

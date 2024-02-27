@@ -42,12 +42,9 @@ async function init(): Promise<void> {
       "🚀All process is done. You just need to wait for depositing your tokens."
     );
 
-    // if (deployed && CLI.projectInfo) {
-    //   return cloneTemplate(CLI.projectInfo);
-    //   // return console.log(
-    //   //   "🚀All process is done. You just need to wait for depositing your tokens."
-    //   // );
-    // }
+    if (deployed && CLI.projectInfo) {
+      return cloneTemplate(CLI.projectInfo);
+    }
   } catch (error: unknown) {
     if (error instanceof Error) console.error("Error:", error.message);
     process.exit(1); // Exit the process if there's an error in the input

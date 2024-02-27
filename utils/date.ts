@@ -5,13 +5,14 @@
 export const comapreDate = (newDate: Date, previousDate: Date) => {
   const newDateTimestamp = Math.floor(newDate.getTime() / 1000);
   const previousDateTimestamp = Math.floor(previousDate.getTime() / 1000);
+
   const valid =
     newDateTimestamp > previousDateTimestamp &&
-    newDate.getMinutes() !== previousDate.getMinutes();
+    newDateTimestamp - previousDateTimestamp > 59;
 
   return (
     valid ||
-    "It must be at least 1 second later than the date of the previous step."
+    "It must be at least 1 minute later than the date of the previous step."
   );
 };
 

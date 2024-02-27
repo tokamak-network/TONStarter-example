@@ -25,7 +25,7 @@ export const cloneTemplate = (projectInfo: DeployedProjectInfo) => {
   //   fs.mkdirSync(newPath, { recursive: true });
 
   // myProject/packages/basic를 newPath로 이동
-  fs.moveSync(`packages/basic`, `../../my-project`, { overwrite: true });
+  fs.moveSync(`packages/basic`, `../my-project`, { overwrite: true });
 
   process.chdir("../");
 
@@ -80,5 +80,3 @@ REACT_APP_TITAN_PROVIDER=https://rpc.titan-goerli.tokamak.network
     });
   }, 1000);
 };
-
-cloneTemplate();

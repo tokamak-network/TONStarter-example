@@ -5,7 +5,7 @@ function commafy(
 ) {
   const defaultDecilamPoint = decilamPoint ?? 0;
   if (num === undefined || num === null) {
-    return undefined;
+    return "-";
   }
   if (isNaN(Number(num))) {
     return undefined;

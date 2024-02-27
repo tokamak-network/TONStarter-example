@@ -74,17 +74,14 @@ export const firstQuestions = [
     name: "tokenPrice",
     message: async (answers: CLI_Answer) => {
       const tonPrice = await getTonPrice();
-      console.log(
-        `How do you set the token price relative to 1 TON (TON price : ${chalk.greenBright(
-          `$${commafy(tonPrice, 2)}`
-        )})?`
-      );
+      `How do you set the token price relative to 1 TON (TON price : ${chalk.greenBright(
+        `$${commafy(tonPrice, 2)}`
+      )})?`;
+
       return `For example : if you enter 10, then your 10 ${answers.tokenSymbol} will have same price as 1 TON. Enter : `;
     },
     validate: (value: string) => validateNumberValue(value),
-    catch: (error: any) => {
-      console.log(error);
-    },
+    catch: (error: any) => {},
   },
   {
     type: "date",
@@ -95,16 +92,22 @@ export const firstQuestions = [
     type: "date",
     name: "whitelistStart",
     message: "When do you like to start whitelist (for STOS holders)?",
+    validate: (endDate: Date, answers: CLI_Answer) =>
+      comapreDate(endDate, answers.snapshot),
   },
   {
     type: "date",
     name: "whitelistEnd",
     message: "When do you like to end whitelist (for STOS holders)?",
+    validate: (endDate: Date, answers: CLI_Answer) =>
+      comapreDate(endDate, answers.whitelistStart),
   },
   {
     type: "date",
     name: "round1Start",
     message: "When do you like to start Round 1 (for STOS holders)?",
+    validate: (endDate: Date, answers: CLI_Answer) =>
+      comapreDate(endDate, answers.whitelistEnd),
   },
   {
     type: "date",
@@ -117,16 +120,22 @@ export const firstQuestions = [
     type: "date",
     name: "round2Start",
     message: "When do you like to start Round 2 (for anyone)?",
+    validate: (endDate: Date, answers: CLI_Answer) =>
+      comapreDate(endDate, answers.round1End),
   },
   {
     type: "date",
     name: "round2End",
     message: "When do you like to end Round 2 (for anyone)?",
+    validate: (endDate: Date, answers: CLI_Answer) =>
+      comapreDate(endDate, answers.round2Start),
   },
   {
     type: "date",
     name: "claimStart",
     message: "When do you like to start a claim-round after sale is done?",
+    validate: (endDate: Date, answers: CLI_Answer) =>
+      comapreDate(endDate, answers.round2End),
   },
   {
     type: "list",

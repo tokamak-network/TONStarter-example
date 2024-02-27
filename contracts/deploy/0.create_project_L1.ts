@@ -48,7 +48,7 @@ async function main(answers: CLI_Answer): Promise<DeployedProjectInfo> {
   const { l1Signer } = await walletSetup();
 
   if (!l1Signer) {
-    return undefined;
+    throw new Error("L1 Signer is not defined");
   }
 
   const EthereumSDK = new MultiChainSDK({
