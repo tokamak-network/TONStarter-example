@@ -19,10 +19,12 @@ cd TONStarter-sdk
 3. Create a environment file(.env) following the .env.sample.
 
 ```
+# Hosted Aggregator Node (JSON-RPC Endpoint).
 RPC_ETHEREUM=$$$$
 RPC_SEPOLIA=$$$$
 RPC_TITAN=https://rpc.titan.tokamak.network
 RPC_TITAN_SEPOLIA=https://rpc.titan-goerli.tokamak.network
+# Your Private key
 WALLET_PK=$$$$
 ```
 
